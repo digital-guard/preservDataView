@@ -1,0 +1,28 @@
+body {
+	font-family: Sans-Serif;
+	font-weight: 200;
+	font-size: 85%;
+	color: currentColor;
+}
+
+#map {
+	height: 500px;
+	/* width: 100%; */
+}
+
+.leaflet-popup em {
+	font-weight: 400;
+	color: darkgray;
+}
+
+.leaflet-tooltip.label {
+	background: none;
+	border: none;
+	box-shadow: none;
+	font-weight: 500;
+}
+
+.leaflet-tooltip.tooltip {
+	font-weight: 500;
+	line-height: 1;
+}

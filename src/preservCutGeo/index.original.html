@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <title>Teste1 - Leaflet</title>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+
+  <style>
+    .filter_reduce_contrast {
+      filter: brightness(130%) contrast(0.9);
+    }
+
+    .leaflet-tooltip.my-labels {
+      background-color: transparent;
+      border: transparent;
+      box-shadow: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Teste Belo Horizonte</h1>
+  Navegação direta pelos dados de
+
+  <a target="_git"
+    href="http://git.digital-guard.org/preservCutGeo-BR2021/tree/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress">git.digital-guard.org/preservCutGeo-BR2021/tree/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress</a>.
+
+  <div id="map" class="map map-home" style="height: 500px; margin-top: 50px;"></div>
+
+
+  <hr />
+  <p>Instruções:
+    <ol>
+      <li>Zoon-in no "mosaico de Geohashes" para selecionar o quadrante desejado;
+      <li>Clique no quadrante para ver os seus pontos;
+      <li>(... depois de carregados) Clique no ponto para ver o endereço;
+      <li>Zoon-out dos pontos para voltar ao mosaico.
+    </ol>
+  </p>
+
+  <p>A ... A tabela <code>ingest.feature_type</code> descreve cada um desses tipos. Resumidamente são:</p>
+
+  <ul>
+
+    <li><img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-geoaddress.png"
+        align="middle" width="40" style="max-width: 100%;"> <strong>geoaddress</strong>: Geo-endereço. Representação
+      geográfica do endereço, como ponto.</li>
+
+    <li><img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-via.png"
+        align="middle" width="40" style="max-width: 100%;"> <strong>via</strong>: Eixo de via. Logradouro representado
+      por linha central, com nome oficial e codlog opcional.</li>
+
+    <li><img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-genericVia.png"
+        align="middle" width="40" style="max-width: 100%;"> <strong>genericvia</strong>: Ferrovia, hidrovia ou qualquer
+      outra "via complementar generalizada" que ajude a delimitar polígonos de quadra. </li>
+
+    <li><img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-building.png"
+        align="middle" width="40" style="max-width: 100%;"> <strong>building</strong>: Polígono de edificação.</li>
+
+    <li><img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-parcel.png"
+        align="middle" width="40" style="max-width: 100%;"> <strong>parcel</strong>: Polígono de lote.</li>
+
+    <li><img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-namedZone.png"
+        align="middle" width="40" style="max-width: 100%;"> <strong>nsvia</strong>: <em>Namespace</em> para distinguir
+      vias duplicadas, tipicamente nome de polígono de bairro ou de loteamento.</li>
+
+    <li><strong>block</strong>: Quadras ou divisões poligonais similares.</li>
+
+  </ul>
+
+  <script>
+    // // GLOBALS:
+
+    const C_url1 =
+      'https://raw.githubusercontent.com/digital-guard/preservCutGeo-BR2021/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress/';
+    var geojs = null;
+    var map = null;
+    var mosaicLayer_zoomFit = null;
+    var is_mosaicLayer = null;
+    var mosaicLayer = null;
+
+    // // EXTRA MAP FUNCTIONS:
+
+    function reloadGeoJSLayer(fp_ghs, forceMosaic) {
+      if (fp_ghs) {
+        //window.location = C_url1 + feature.properties.ghs +'.geojson';
+        if (forceMosaic !== undefined && forceMosaic) is_mosaicLayer = null;
+        if (fp_ghs != 'geohahes') fp_ghs = 'pts_' + fp_ghs;
+        if (is_mosaicLayer === null || is_mosaicLayer) {
+          if (geojs) {
+            map.removeLayer(geojs);
+            if (mosaicLayer) mosaicLayer.unbindTooltip(); // foreach feature?
+          }
+          fetch(C_url1 + fp_ghs + '.geojson')
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              geojs = L.geoJSON(
+                data, {
+                  onEachFeature: onEachFeature
+                } // cuidado recorrencia
+              ).addTo(map);
+              map.fitBounds(geojs.getBounds());
+              if (is_mosaicLayer) {
+                mosaicLayer_zoomFit = map.getZoom();
+                map.options.minZoom = mosaicLayer_zoomFit - 2;
+              }
+            });
+          is_mosaicLayer = (fp_ghs == 'geohahes');
+        }
+      } else console.log("ERROR10: click or  fp_ghs=", fp_ghs);
+    } // \reloadGeoJSLayer
+
+    function onEachFeature(feature, layer) {
+      var fp_ghs = null;
+      if (feature.properties) {
+        if (feature.properties.ghs)
+          fp_ghs = feature.properties.ghs;
+        else if (feature.properties.address) layer.bindPopup(feature.properties.address)
+      }
+      if (fp_ghs) {
+        mosaicLayer = layer; // ro later unbindTooltip
+        layer.bindTooltip(
+          String(feature.properties.ghs).substring(3), {
+            permanent: true,
+            opacity: 0.7,
+            direction: "center",
+            className: "my-labels"
+          }
+        ).openTooltip();
+      }
+
+      // ver https://stackoverflow.com/a/31353203/287948
+      if (fp_ghs) layer.on('mouseover', (e) => {
+        //console.log("debug2",fp_ghs,this);
+        layer.setStyle({
+          'fillColor': '#ff0000'
+        }); // falta realçar o label e devolver cor certa
+        //layer.bindPopup( '<a href="#'+feature.properties.ghs+'">'+ feature.properties.ghs+'</a>' );
+        layer.bindTooltip(
+          "Clique para ver os pontos<br/>do Geohash <b>" + feature.properties.ghs + "</b>", {
+            permanent: true
+          }
+        ); // ?? como usar a posição do mouse??   .setLatLng(e.latlng);
+      });
+      if (fp_ghs) layer.on('mouseout', () => {
+        layer.unbindTooltip();
+        layer.setStyle({
+          'fillColor': '#2222ff'
+        });
+      });
+      if (fp_ghs) // only mosaic
+        layer.on('click', () => reloadGeoJSLayer(fp_ghs));
+    } // \onEachFeature
+
+
+    // // MAP IMPLEMENTATION:
+
+    map = L.map('map').setView([-23.550385, -46.633956], 10);
+    map.attributionControl.setPrefix('<a href="http://osm.codes">OSMcodes</a>');
+    map.on('zoom', function () {
+      if (map.getZoom() <= mosaicLayer_zoomFit && !is_mosaicLayer)
+        reloadGeoJSLayer('geohahes', true);
+    });
+
+    var LtileMap = L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '<a href="https://www.openstreetmap.org/copyright">OSM</a>'
+      }
+    ).addTo(map);
+    L.DomUtil.addClass(LtileMap.getContainer(), 'filter_reduce_contrast');
+
+    L.control.scale({
+      imperial: false
+    }).addTo(map);
+
+    reloadGeoJSLayer('geohahes');
+    map.options.maxZoom = 20;
+  </script>
+
+
+</body>
+
+</html>
