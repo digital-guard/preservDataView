@@ -1,34 +1,18 @@
 window.onload = () => {
-  const log = true;
-  const pointZero = {
-    type: "Point",
-    coordinates: [0, 0],
-  };
+  // ?7h2wz3
+  const pathname = document.location.search.replace("?", "");
+  const ghs = pathname || "geohahes";
+  console.log(ghs);
+  const path = ghs === "geohahes" ? "geohahes" : `pts_${ghs}`;
+  console.log(path);
   const orange = chroma("orange").hex();
-  // const baseURL = "https://raw.githubusercontent.com/elpbatista/afa-preserv/main/";
   const baseURL =
     "https://raw.githubusercontent.com/digital-guard/preservCutGeo-BR2021/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress/";
   const colors = chroma.scale("YlGnBu");
   const normalize = (val, max, min) => (val - min) / (max - min);
-  const addPoints = (ghs) =>
-    fetch(`${baseURL}pts_${ghs}.geojson`).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      var addresses = L.geoJSON(data, {
-        // onEachFeature: onEachFeature,
-        pointToLayer: function (feature, latlng) {
-          return L.circleMarker(latlng, {
-            radius: 3,
-            fillColor: orange,
-            color: "#000",
-            weight: .15,
-            opacity: 1,
-            fillOpacity: 0.8,
-          });
-        },
-      }).addTo(map);
-    });
-  
+
+  const map = L.map("map").setView([-23.550385, -46.633956], 10);
+
   const tiles = L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
     {
@@ -40,95 +24,104 @@ window.onload = () => {
       tileSize: 512,
       zoomOffset: -1,
     }
-  );
-  const map = L.map("map", {
-    layers: [tiles],
-    center: L.LatLng(-23.550385, -46.633956),
-    zoom: 10,
-  });
+  ).addTo(map);
 
-  fetch(`${baseURL}geohahes.geojson`)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      let densities = data.features.map((a) => Math.round(a.properties.val_density_km2));
-      let max = Math.max(...densities);
-      let min = Math.min(...densities);
+  const loadGeoJson = (ghs) =>
+    fetch(`${baseURL + path}.geojson`)
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        if (ghs === "geohahes") {
+          /*****************************************************************************
+           * Load Mosaic
+           *****************************************************************************/
+          let densities = data.features.map((a) =>
+            Math.round(a.properties.val_density_km2)
+          );
+          let max = Math.max(...densities);
+          let min = Math.min(...densities);
 
-      // +++++++++++++++++++++++++++++++++++++++++++++++++++
-      if (log) {
-        console.log(chroma.brewer.YlGnBu); //9  colors
-        console.log(densities);
-        console.log(
-          colors(
-            normalize(
-              Math.round(data.features[2].properties.val_density_km2),
-              max,
-              min
-            )
-          ).hex()
-        );
-        console.log(min);
-        console.log(max);
-        console.log(normalize(300, max, min));
-        console.log(Math.round(data.features[2].properties.val_density_km2));
-        console.log(chroma("orange").hex());
-      }
-      // +++++++++++++++++++++++++++++++++++++++++++++++++++
-      geohashes = L.geoJSON(data, {
-        style: (feature) => ({
-          fillColor: colors(
-            normalize(Math.round(feature.properties.val_density_km2), max, min)
-          ).hex(),
-          color: "#000",
-          weight: 0.125,
-          fillOpacity: 0.65,
-        }),
-        onEachFeature: (feature, layer) => {
-          let center = layer.getBounds().getCenter();
-          let label = L.marker(center, {
-            icon: L.divIcon({
-              html: "",
-              iconSize: [0, 0],
+          dataLayer = L.geoJSON(data, {
+            style: (feature) => ({
+              fillColor: colors(
+                normalize(
+                  Math.round(feature.properties.val_density_km2),
+                  max,
+                  min
+                )
+              ).hex(),
+              color: "#000",
+              weight: 0.125,
+              fillOpacity: 0.65,
             }),
-          })
-            .bindTooltip(feature.properties.ghs.substring(3), {
-              permanent: true,
-              opacity: 0.7,
-              direction: "center",
-              className: "label",
-            })
-            .addTo(map);
-          layer
-            .bindTooltip(`Clique para ver os pontos<br/>do Geohash <b>${feature.properties.ghs}</b>`, {
-              sticky: true,
-              opacity: 0.7,
-              direction: "top",
-              className: "tooltip",
-            })
-            .on("mouseover", () => {
-              layer.setStyle({
-                fillColor: "#ffa500",
+            onEachFeature: (feature, layer) => {
+              let center = layer.getBounds().getCenter();
+              let label = L.marker(center, {
+                icon: L.divIcon({
+                  html: "",
+                  iconSize: [0, 0],
+                }),
+              })
+                .bindTooltip(feature.properties.ghs.substring(3), {
+                  permanent: true,
+                  opacity: 0.7,
+                  direction: "center",
+                  className: "label",
+                })
+                .addTo(map);
+              layer
+                .bindTooltip(
+                  `Clique para ver os pontos<br/>do Geohash <b>${feature.properties.ghs}</b>`,
+                  {
+                    sticky: true,
+                    opacity: 0.7,
+                    direction: "top",
+                    className: "tooltip",
+                  }
+                )
+                .on("mouseover", () => {
+                  layer.setStyle({
+                    fillColor: "#ffa500",
+                  });
+                })
+                .on("mouseout", () => {
+                  layer.setStyle({
+                    fillColor: colors(
+                      normalize(
+                        Math.round(feature.properties.val_density_km2),
+                        max,
+                        min
+                      )
+                    ).hex(),
+                  });
+                })
+                .on("mouseup", () => {
+                  // addPoints(feature.properties.ghs);
+                  window.location.href = `?${feature.properties.ghs}`;
+                });
+            },
+          });
+        } else {
+          /*****************************************************************************
+           * Load Points
+           *****************************************************************************/
+          dataLayer = L.geoJSON(data, {
+            // onEachFeature: onEachFeature,
+            pointToLayer: function (feature, latlng) {
+              return L.circleMarker(latlng, {
+                radius: 3,
+                fillColor: orange,
+                color: "#000",
+                weight: 0.15,
+                opacity: 1,
+                fillOpacity: 0.8,
               });
-            })
-            .on("mouseout", () => {
-              layer.setStyle({
-                fillColor: colors(
-                  normalize(
-                    Math.round(feature.properties.val_density_km2),
-                    max,
-                    min
-                  )
-                ).hex(),
-              });
-            })
-            .on("mouseup", () => {
-              map.setView(center, 18);
-              addPoints(feature.properties.ghs);
-            });
-        },
-      }).addTo(map);
-      map.fitBounds(geohashes.getBounds());
-    });
+            },
+          });
+        }
+        dataLayer.addTo(map);
+        map.fitBounds(dataLayer.getBounds());
+      });
+  loadGeoJson(ghs);
 }; //window onload
