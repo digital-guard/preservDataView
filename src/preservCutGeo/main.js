@@ -1,10 +1,9 @@
 window.onload = () => {
-  // ?7h2wz3
   const pathname = document.location.search.replace("?", "");
   const ghs = pathname || "geohahes";
   console.log(ghs);
   const path = ghs === "geohahes" ? "geohahes" : `pts_${ghs}`;
-  console.log(path);
+  const mapStyle = ghs === "geohahes" ? "light-v10" : "streets-v11";
   const orange = chroma("orange").hex();
   const baseURL =
     "https://raw.githubusercontent.com/digital-guard/preservCutGeo-BR2021/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress/";
@@ -16,11 +15,11 @@ window.onload = () => {
   const tiles = L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
     {
-      // maxZoom: 18,
+      maxZoom: 25,
       attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
         'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      id: "mapbox/streets-v11",
+      id: `mapbox/${mapStyle}`,
       tileSize: 512,
       zoomOffset: -1,
     }
@@ -97,7 +96,6 @@ window.onload = () => {
                   });
                 })
                 .on("mouseup", () => {
-                  // addPoints(feature.properties.ghs);
                   window.location.href = `?${feature.properties.ghs}`;
                 });
             },
@@ -110,12 +108,16 @@ window.onload = () => {
             // onEachFeature: onEachFeature,
             pointToLayer: function (feature, latlng) {
               return L.circleMarker(latlng, {
-                radius: 3,
+                radius: 4,
                 fillColor: orange,
                 color: "#000",
                 weight: 0.15,
                 opacity: 1,
                 fillOpacity: 0.8,
+              }).bindTooltip(feature.properties.address, {
+                opacity: 0.7,
+                direction: "top",
+                className: "tooltip",
               });
             },
           });
