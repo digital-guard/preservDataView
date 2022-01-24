@@ -98,7 +98,7 @@
       if (fp_ghs) {
         //window.location = C_url1 + feature.properties.ghs +'.geojson';
         if (forceMosaic !== undefined && forceMosaic) is_mosaicLayer = null;
-        if (fp_ghs != 'geohahes') fp_ghs = 'pts_' + fp_ghs;
+        if (fp_ghs != 'geohashes') fp_ghs = 'pts_' + fp_ghs;
         if (is_mosaicLayer === null || is_mosaicLayer) {
           if (geojs) {
             map.removeLayer(geojs);
@@ -120,7 +120,7 @@
                 map.options.minZoom = mosaicLayer_zoomFit - 2;
               }
             });
-          is_mosaicLayer = (fp_ghs == 'geohahes');
+          is_mosaicLayer = (fp_ghs == 'geohashes');
         }
       } else console.log("ERROR10: click or  fp_ghs=", fp_ghs);
     } // \reloadGeoJSLayer
@@ -174,7 +174,7 @@
     map.attributionControl.setPrefix('<a href="http://osm.codes">OSMcodes</a>');
     map.on('zoom', function () {
       if (map.getZoom() <= mosaicLayer_zoomFit && !is_mosaicLayer)
-        reloadGeoJSLayer('geohahes', true);
+        reloadGeoJSLayer('geohashes', true);
     });
 
     var LtileMap = L.tileLayer(
@@ -188,7 +188,7 @@
       imperial: false
     }).addTo(map);
 
-    reloadGeoJSLayer('geohahes');
+    reloadGeoJSLayer('geohashes');
     map.options.maxZoom = 20;
   </script>
 

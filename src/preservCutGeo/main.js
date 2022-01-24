@@ -1,9 +1,9 @@
 window.onload = () => {
   const pathname = document.location.search.replace("?", "");
-  const ghs = pathname || "geohahes";
+  const ghs = pathname || "geohashes";
   console.log(ghs);
-  const path = ghs === "geohahes" ? "geohahes" : `pts_${ghs}`;
-  const mapStyle = ghs === "geohahes" ? "light-v10" : "streets-v11";
+  const path = ghs === "geohashes" ? "geohashes" : `pts_${ghs}`;
+  const mapStyle = ghs === "geohashes" ? "light-v10" : "streets-v11";
   const orange = chroma("orange").hex();
   const baseURL =
     "https://raw.githubusercontent.com/digital-guard/preservCutGeo-BR2021/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress/";
@@ -31,7 +31,7 @@ window.onload = () => {
         return response.json();
       })
       .then(function (data) {
-        if (ghs === "geohahes") {
+        if (ghs === "geohashes") {
           /*****************************************************************************
            * Load Mosaic
            *****************************************************************************/
