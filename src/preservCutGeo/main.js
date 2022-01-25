@@ -71,7 +71,7 @@ window.onload = () => {
                 .addTo(map);
               layer
                 .bindTooltip(
-                  `Densidade: <b>${Math.round(feature.properties.val_density_km2)} pts/km²</b><br/>Clique para ver os pontos<br/>do Geohash <b>${feature.properties.ghs}</b>`,
+                  `Densidade: <b>${Math.round(feature.properties.val_density_km2)} pts/km²</b><br/>Volumetria: <b>${feature.properties.val} pts</b><br/>... Clique para ver os pontos<br/>do Geohash <b>${feature.properties.ghs}</b>`,
                   {
                     sticky: true,
                     opacity: 0.7,
