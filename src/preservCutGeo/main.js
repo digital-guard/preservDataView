@@ -11,17 +11,16 @@ window.onload = () => {
   const normalize = (val, max, min) => (val - min) / (max - min);
 
   const map = L.map("map").setView([-23.550385, -46.633956], 10);
+  map.attributionControl.setPrefix('<a title="© tile data" target="_copyr" href="https://www.OSM.org/copyright">OSM</a>'); // no Leaflet advertisement!
 
   const tiles = L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
     {
       maxZoom: 25,
-      attribution:
-        '© data <a href="https://www.openstreetmap.org/copyright">OSM</a>, ' +
-        'imagery <a href="https://www.mapbox.com/">Mapbox</a>',
       id: `mapbox/${mapStyle}`,
       tileSize: 512,
       zoomOffset: -1,
+      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>'
     }
   ).addTo(map);
 

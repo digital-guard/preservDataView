@@ -3,7 +3,7 @@
 
 <head>
 
-  <title>Teste1 - Leaflet</title>
+  <title>PK 8.1 de BR</title>
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,43 +27,73 @@
       box-shadow: none;
       font-weight: bold;
     }
+    td.dataselector:hover { background-color: yellow; }
   </style>
 </head>
 
 <body>
 
-  <h1>Teste Belo Horizonte</h1>
-  Navegação direta pelos dados de
+<h2>BR-MG-BeloHorizonte • Dados filtrados do pacote 8.1</h2>
+<p>Dados doados pela  	<a rel="external" target="_doador" href="https://prefeitura.pbh.gov.br/">Prefeitura de Belo Horizonte</a>  (<small>CNPJ 18.715.383/0001-40 • Wikidtata <a rel="external" target="_doador" href="https://www.wikidata.org/wiki/Q30263897">Q30263897</a></small>).</p>
+<p>Pacote obtido por e-mail e <i>download</i> em <b>2020-03-19</b>, sob testemunho de Igor (avaliação técnica) e Thierry (repesentação institucional),
+  que confirmaram com Fulano a
+  <a rel="external" target="_doador" href="https://creativecommons.org/publicdomain/zero/1.0/deed.pt_BR">licença livre <b>CC0</b></a>
+  e as evidências de integridade da origem conforme abaixo:</p>
 
-  <a target="_git"
-    href="http://git.digital-guard.org/preservCutGeo-BR2021/tree/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress">git.digital-guard.org/preservCutGeo-BR2021/tree/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress</a>.
+
+<table border="1" width="90%" align="center" class="dataselector">
+  <tr><th>Layer</th> <th>Origem </th> <th>Descrição e extração</th></tr>
+  <tr style="background-color:#FCC">
+    <td class="dataselector" onclick="alert('Avisa que é o mapa ativo, layer geoaddress')">
+      <img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-geoaddress.png"
+        align="middle" width="40" style="max-width: 100%;"> <strong>geoaddress</strong> (geo-endereço)
+    </td>
+    <td>
+       <a title="SHA256 1ce29a555565be5f540ab0c6f93ac55797c368293e0a6bfb479a645a5a23f542" href="http://dl.digital-guard.org/1ce29a555565be5f540ab0c6f93ac55797c368293e0a6bfb479a645a5a23f542.zip"><code>1ce29a5...zip</code></a>
+       (42826370 bytes • 40,84 MiB)</td>
+    <td>Representação  geográfica do endereço, como ponto.<br><code>make geoaddress</code></td>
+  </tr>
+  <tr>
+    <td class="dataselector"
+        onclick="alert('Muda o mapa, mostra mosaico de navegação do layer via')"
+        title="clique para mudar o mapa para este layer"
+       >
+      <img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-via.png"
+        align="middle" width="40" style="max-width: 100%;"> <strong>via</strong> (eixo de via)
+    </td>
+    <td>
+      <a title="SHA256 7d7d0661683a8eebd95d544c47dd0e254fc75e3d916fe9900a3bd9fb7b2cc378" href="http://dl.digital-guard.org/7d7d0661683a8eebd95d544c47dd0e254fc75e3d916fe9900a3bd9fb7b2cc378.zip"><code>7d7d066...zip</code></a>
+      (2637788 bytes • 2,52 MiB)</td>
+    <td>Logradouro representado por linha central, com nome oficial e codlog opcional.<br/><code>make via</code></td>
+  </tr>
+</table>
+
+<p>A extração e filtragem dos dados de cada layer descrito acima tem seu <code>makefile</code>
+       gerado conforme definições em <a target="_git"
+       https://github.com/digital-guard/
+        href="http://git.digital-guard.org/preserv-BR/blob/main/data/MG/BeloHorizonte/_pk0008.01/make_conf.yaml"><small>git.digital-guard.org/preserv-BR/blob/main/data/MG/BeloHorizonte/_pk0008.01/make_conf.yaml</small></a>.
+        A  <a rel="external" target="_docs" href="https://github.com/digital-guard/preserv/blob/main/docs/pt/man-makeConf.md">documentação técnicas para execução do make</a> fornece mais detalhes.
+
+   <br/>A navegação no mapa abaixo faz uso direto e transparente dos dados publicados em
+     <a target="_git"
+      href="http://git.digital-guard.org/preservCutGeo-BR2021/tree/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress"><small>git.digital-guard.org/preservCutGeo-BR2021/tree/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress</small></a>.
+  </p>
 
   <div id="map" class="map map-home" style="height: 500px; margin-top: 50px;"></div>
 
 
   <hr />
-  <p>Instruções:
+  <p>Instruções para navegar no mapa e seus dados:
     <ol>
       <li>Zoon-in no "mosaico de Geohashes" para selecionar o quadrante desejado;
       <li>Clique no quadrante para ver os seus pontos;
-      <li>(... depois de carregados) Clique no ponto para ver o endereço;
+      <li>(depois de carregados os pontos) Clique no ponto para ver o endereço;
       <li>Zoon-out dos pontos para voltar ao mosaico.
     </ol>
   </p>
 
-  <p>A ... A tabela <code>ingest.feature_type</code> descreve cada um desses tipos. Resumidamente são:</p>
-
-  <ul>
-
-    <li><img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-geoaddress.png"
-        align="middle" width="40" style="max-width: 100%;"> <strong>geoaddress</strong>: Geo-endereço. Representação
-      geográfica do endereço, como ponto.</li>
-
-    <li><img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-via.png"
-        align="middle" width="40" style="max-width: 100%;"> <strong>via</strong>: Eixo de via. Logradouro representado
-      por linha central, com nome oficial e codlog opcional.</li>
-
-    <li><img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-genericVia.png"
+    <!--
+    li><img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-genericVia.png"
         align="middle" width="40" style="max-width: 100%;"> <strong>genericvia</strong>: Ferrovia, hidrovia ou qualquer
       outra "via complementar generalizada" que ajude a delimitar polígonos de quadra. </li>
 
@@ -77,9 +107,9 @@
         align="middle" width="40" style="max-width: 100%;"> <strong>nsvia</strong>: <em>Namespace</em> para distinguir
       vias duplicadas, tipicamente nome de polígono de bairro ou de loteamento.</li>
 
-    <li><strong>block</strong>: Quadras ou divisões poligonais similares.</li>
+    <li><strong>block</strong>: Quadras ou divisões poligonais similares.</li
 
-  </ul>
+    -->
 
   <script>
     // // GLOBALS:
@@ -171,16 +201,15 @@
     // // MAP IMPLEMENTATION:
 
     map = L.map('map').setView([-23.550385, -46.633956], 10);
-    map.attributionControl.setPrefix('<a href="http://osm.codes">OSMcodes</a>');
+    map.attributionControl.setPrefix('<a title="© tile data" target="_copyr" href="https://www.OSM.org/copyright">OSM</a>'); // no Leaflet advertisement!
+
     map.on('zoom', function () {
       if (map.getZoom() <= mosaicLayer_zoomFit && !is_mosaicLayer)
         reloadGeoJSLayer('geohashes', true);
     });
 
     var LtileMap = L.tileLayer(
-      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '<a href="https://www.openstreetmap.org/copyright">OSM</a>'
-      }
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
     ).addTo(map);
     L.DomUtil.addClass(LtileMap.getContainer(), 'filter_reduce_contrast');
 
