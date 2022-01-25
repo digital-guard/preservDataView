@@ -17,8 +17,8 @@ window.onload = () => {
     {
       maxZoom: 25,
       attribution:
-        'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        '© data <a href="https://www.openstreetmap.org/copyright">OSM</a>, ' +
+        'imagery <a href="https://www.mapbox.com/">Mapbox</a>',
       id: `mapbox/${mapStyle}`,
       tileSize: 512,
       zoomOffset: -1,
@@ -71,7 +71,7 @@ window.onload = () => {
                 .addTo(map);
               layer
                 .bindTooltip(
-                  `Clique para ver os pontos<br/>do Geohash <b>${feature.properties.ghs}</b>`,
+                  `Densidade pts/km²: ${Math.round(feature.properties.val_density_km2)},<br/>Clique para ver os pontos<br/>do Geohash <b>${feature.properties.ghs}</b>`,
                   {
                     sticky: true,
                     opacity: 0.7,
