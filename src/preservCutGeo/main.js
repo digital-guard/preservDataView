@@ -17,6 +17,7 @@ window.onload = () => {
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
     {
       maxZoom: 25,
+      minZoom: 10,
       id: `mapbox/${mapStyle}`,
       tileSize: 512,
       zoomOffset: -1,
@@ -123,6 +124,7 @@ window.onload = () => {
         }
         dataLayer.addTo(map);
         map.fitBounds(dataLayer.getBounds());
+        map.setMaxBounds(map.getBounds());
       });
   loadGeoJson(ghs);
 }; //window onload
