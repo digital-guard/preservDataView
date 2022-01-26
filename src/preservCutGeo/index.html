@@ -19,7 +19,7 @@
 
 <body>
 
-	<h2>BR-MG-BeloHorizonte • Dados filtrados do pacote 8.1</h2>
+	<h1>BR-MG-BeloHorizonte • Dados filtrados do pacote 8.1</h1>
 	<p>Dados doados pela <a rel="external" target="_doador" href="https://prefeitura.pbh.gov.br/">Prefeitura de Belo
 			Horizonte</a> (<small>CNPJ 18.715.383/0001-40 • Wikidtata <a rel="external" target="_doador"
 				href="https://www.wikidata.org/wiki/Q30263897">Q30263897</a></small>).</p>
@@ -30,35 +30,36 @@
 			<b>CC0</b></a>
 		e as evidências de integridade da origem conforme abaixo:</p>
 
-	<table border="1" width="90%" align="center" class="dataselector">
-		<tr>
+	<table class="styled-table dataselector">
+		<thead>
 			<th>Layer</th>
 			<th>Origem </th>
 			<th>Descrição e extração</th>
-		</tr>
-		<tr style="background-color:#FCC">
-			<td class="dataselector" onclick="alert('Avisa que é o mapa ativo, layer geoaddress')">
-				<img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-geoaddress.png"
-					align="middle" width="40" style="max-width: 100%;"> <strong>geoaddress</strong> (geo-endereço)
-			</td>
-			<td>
-				<a title="SHA256 1ce29a555565be5f540ab0c6f93ac55797c368293e0a6bfb479a645a5a23f542"
-					href="http://dl.digital-guard.org/1ce29a555565be5f540ab0c6f93ac55797c368293e0a6bfb479a645a5a23f542.zip"><code>1ce29a5...zip</code></a>
-				(42826370 bytes • 40,84 MiB)</td>
-			<td>Representação geográfica do endereço, como ponto.<br><code>make geoaddress</code></td>
-		</tr>
-		<tr>
-			<td class="dataselector" onclick="alert('Muda o mapa, mostra mosaico de navegação do layer via')"
-				title="clique para mudar o mapa para este layer">
-				<img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-via.png"
-					align="middle" width="40" style="max-width: 100%;"> <strong>via</strong> (eixo de via)
-			</td>
-			<td>
-				<a title="SHA256 7d7d0661683a8eebd95d544c47dd0e254fc75e3d916fe9900a3bd9fb7b2cc378"
-					href="http://dl.digital-guard.org/7d7d0661683a8eebd95d544c47dd0e254fc75e3d916fe9900a3bd9fb7b2cc378.zip"><code>7d7d066...zip</code></a>
-				(2637788 bytes • 2,52 MiB)</td>
-			<td>Logradouro representado por linha central, com nome oficial e codlog opcional.<br /><code>make via</code></td>
-		</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="dataselector" onclick="alert('Avisa que é o mapa ativo, layer geoaddress')">
+					<img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-geoaddress.png"> <strong>geoaddress</strong> (geo-endereço)
+				</td>
+				<td>
+					<a title="SHA256 1ce29a555565be5f540ab0c6f93ac55797c368293e0a6bfb479a645a5a23f542"
+						href="http://dl.digital-guard.org/1ce29a555565be5f540ab0c6f93ac55797c368293e0a6bfb479a645a5a23f542.zip"><code>1ce29a5...zip</code></a>
+					(42826370 bytes • 40,84 MiB)</td>
+				<td>Representação geográfica do endereço, como ponto.<br><code>make geoaddress</code></td>
+			</tr>
+			<tr>
+				<td class="dataselector" onclick="alert('Muda o mapa, mostra mosaico de navegação do layer via')"
+					title="clique para mudar o mapa para este layer">
+					<img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-via.png"> <strong>via</strong> (eixo de via)
+				</td>
+				<td>
+					<a title="SHA256 7d7d0661683a8eebd95d544c47dd0e254fc75e3d916fe9900a3bd9fb7b2cc378"
+						href="http://dl.digital-guard.org/7d7d0661683a8eebd95d544c47dd0e254fc75e3d916fe9900a3bd9fb7b2cc378.zip"><code>7d7d066...zip</code></a>
+					(2637788 bytes • 2,52 MiB)</td>
+				<td>Logradouro representado por linha central, com nome oficial e codlog opcional.<br /><code>make via</code>
+				</td>
+			</tr>
+		</tbody>
 	</table>
 
 	<p>A extração e filtragem dos dados de cada layer descrito acima tem seu <code>makefile</code>
