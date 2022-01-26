@@ -4,7 +4,6 @@ window.onload = () => {
   console.log(ghs);
   const path = ghs === "geohashes" ? "geohashes" : `pts_${ghs}`;
   const mapStyle = ghs === "geohashes" ? "light-v10" : "streets-v11";
-  const minZoom = ghs === "geohashes" ? 10 : 15;
   const orange = chroma("orange").hex();
   const baseURL =
     "https://raw.githubusercontent.com/digital-guard/preservCutGeo-BR2021/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress/";
@@ -18,7 +17,6 @@ window.onload = () => {
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
     {
       maxZoom: 25,
-      minZoom: minZoom,
       id: `mapbox/${mapStyle}`,
       tileSize: 512,
       zoomOffset: -1,
@@ -126,6 +124,7 @@ window.onload = () => {
         dataLayer.addTo(map);
         map.fitBounds(dataLayer.getBounds());
         map.setMaxBounds(map.getBounds());
+        map.options.minZoom = map.getZoom();
       });
   loadGeoJson(ghs);
 }; //window onload
