@@ -9,13 +9,17 @@ window.onload = () => {
     "https://raw.githubusercontent.com/digital-guard/preservCutGeo-BR2021/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress/";
   const colors = chroma.scale("YlGnBu");
   const normalize = (val, max, min) => (val - min) / (max - min);
+  const minZoom = 10;
 
   const map = L.map("map").setView([-23.550385, -46.633956], 10);
-  map.attributionControl.setPrefix('<a title="© tile data" target="_copyr" href="https://www.OSM.org/copyright">OSM</a>'); // no Leaflet advertisement!
+  map.attributionControl.setPrefix(
+    '<a title="© tile data" target="_copyr" href="https://www.OSM.org/copyright">OSM</a>'
+  ); // no Leaflet advertisement!
 
   const tiles = L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
     {
+      minZoom: minZoom,
       maxZoom: 25,
       id: `mapbox/${mapStyle}`,
       tileSize: 512,
@@ -70,7 +74,13 @@ window.onload = () => {
                 .addTo(map);
               layer
                 .bindTooltip(
-                  `Densidade: <b>${Math.round(feature.properties.val_density_km2)} pts/km²</b><br/>Volumetria: <b>${feature.properties.val} pts</b><br/>... Clique para ver os pontos<br/>do Geohash <b>${feature.properties.ghs}</b>`,
+                  `Densidade: <b>${Math.round(
+                    feature.properties.val_density_km2
+                  )} pts/km²</b><br/>Volumetria: <b>${
+                    feature.properties.val
+                  } pts</b><br/>... Clique para ver os pontos<br/>do Geohash <b>${
+                    feature.properties.ghs
+                  }</b>`,
                   {
                     sticky: true,
                     opacity: 0.7,
@@ -124,7 +134,8 @@ window.onload = () => {
         dataLayer.addTo(map);
         map.fitBounds(dataLayer.getBounds());
         map.setMaxBounds(map.getBounds());
-        map.options.minZoom = map.getZoom();
+        minZoom = map.getZoom() - 2;
+        map.options.minZoom = minZoom;
       });
   loadGeoJson(ghs);
 }; //window onload
