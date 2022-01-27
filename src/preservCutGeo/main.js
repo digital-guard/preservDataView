@@ -1,8 +1,8 @@
 window.onload = () => {
   const LocationSearch = document.location.search.replace("?", "");
+  // const path = ghs === "geohashes" ? "geohashes" : `pts_${ghs}`;
   const ghs = LocationSearch || "geohashes";
-  console.log(document.location);
-  const path = ghs === "geohashes" ? "geohashes" : `pts_${ghs}`;
+  // console.log(document.location);
   const mapStyle = ghs === "geohashes" ? "light-v10" : "streets-v11";
   const orange = chroma("orange").hex();
   const baseURL =
@@ -17,11 +17,14 @@ window.onload = () => {
   ); // no Leaflet advertisement!
 
   map.on("zoom", function () {
-    if (map.getZoom() <= minZoom && ghs !== "geohashes") {
-      window.location.href =
-        document.location.origin + document.location.pathname;
+    if (map.getZoom() <= 12 && ghs !== "geohashes") {
+      console.log(minZoom);
+      // window.location.href =
+      //   document.location.origin + document.location.pathname;
+      loadGeoJson("geohashes");
     }
   });
+  const markers = L.layerGroup();
 
   const tiles = L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
@@ -34,8 +37,18 @@ window.onload = () => {
       attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
     }
   ).addTo(map);
-
-  const loadGeoJson = (ghs) =>
+  var dataLayer, label;
+  const loadGeoJson = (ghs) => {
+    let path = ghs === "geohashes" ? "geohashes" : `pts_${ghs}`;
+    if (dataLayer) {
+      if (label) {
+        if (map.hasLayer(markers)) {
+          console.log("already have one, clear it");
+          markers.clearLayers();
+        }
+      }
+      map.removeLayer(dataLayer);
+    }; 
     fetch(`${baseURL + path}.geojson`)
       .then(function (response) {
         return response.json();
@@ -50,7 +63,6 @@ window.onload = () => {
           );
           let max = Math.max(...densities);
           let min = Math.min(...densities);
-
           dataLayer = L.geoJSON(data, {
             style: (feature) => ({
               fillColor: colors(
@@ -66,7 +78,7 @@ window.onload = () => {
             }),
             onEachFeature: (feature, layer) => {
               let center = layer.getBounds().getCenter();
-              let label = L.marker(center, {
+              label = L.marker(center, {
                 icon: L.divIcon({
                   html: "",
                   iconSize: [0, 0],
@@ -77,8 +89,8 @@ window.onload = () => {
                   opacity: 0.7,
                   direction: "center",
                   className: "label",
-                })
-                .addTo(map);
+                });
+                markers.addLayer(label);
               layer
                 .bindTooltip(
                   `Densidade: <b>${Math.round(
@@ -112,10 +124,13 @@ window.onload = () => {
                   });
                 })
                 .on("mouseup", () => {
-                  window.location.href = `?${feature.properties.ghs}`;
+                  // window.location.href = `?${feature.properties.ghs}`;
+                  console.log(feature.properties.ghs);
+                  loadGeoJson(feature.properties.ghs);
                 });
             },
           });
+          map.addLayer(markers);
         } else {
           /*****************************************************************************
            * Load Points
@@ -144,5 +159,6 @@ window.onload = () => {
         minZoom = map.getZoom() - 2;
         map.options.minZoom = minZoom;
       });
+  };;
   loadGeoJson(ghs);
 }; //window onload
