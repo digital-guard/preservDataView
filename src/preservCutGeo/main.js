@@ -1,15 +1,13 @@
 window.onload = () => {
   const LocationSearch = document.location.search.replace("?", "");
-  // const path = ghs === "geohashes" ? "geohashes" : `pts_${ghs}`;
   const ghs = LocationSearch || "geohashes";
-  // console.log(document.location);
   const mapStyle = ghs === "geohashes" ? "light-v10" : "streets-v11";
   const orange = chroma("orange").hex();
   const baseURL =
     "https://raw.githubusercontent.com/digital-guard/preservCutGeo-BR2021/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress/";
   const colors = chroma.scale("YlGnBu");
   const normalize = (val, max, min) => (val - min) / (max - min);
-  
+
   let minZoom = 10;
   let isMosaic = true;
   let dataLayer, label;
@@ -25,8 +23,6 @@ window.onload = () => {
       loadGeoJson("geohashes");
     }
   });
-  const markers = L.layerGroup();
-
   const tiles = L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
     {
@@ -39,12 +35,12 @@ window.onload = () => {
     }
   ).addTo(map);
 
+  const markers = L.layerGroup();
   const loadGeoJson = (ghs) => {
     let path = ghs === "geohashes" ? "geohashes" : `pts_${ghs}`;
     if (dataLayer) {
       if (label) {
         if (map.hasLayer(markers)) {
-          console.log("already have one, clear it");
           markers.clearLayers();
         }
       }
