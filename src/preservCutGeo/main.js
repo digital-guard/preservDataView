@@ -9,7 +9,10 @@ window.onload = () => {
     "https://raw.githubusercontent.com/digital-guard/preservCutGeo-BR2021/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress/";
   const colors = chroma.scale("YlGnBu");
   const normalize = (val, max, min) => (val - min) / (max - min);
+  
   let minZoom = 10;
+  let isMosaic = true;
+  let dataLayer, label;
 
   const map = L.map("map").setView([-23.550385, -46.633956], 10);
   map.attributionControl.setPrefix(
@@ -17,10 +20,8 @@ window.onload = () => {
   ); // no Leaflet advertisement!
 
   map.on("zoom", function () {
-    if (map.getZoom() <= 12 && ghs !== "geohashes") {
+    if (map.getZoom() <= minZoom && !isMosaic) {
       console.log(minZoom);
-      // window.location.href =
-      //   document.location.origin + document.location.pathname;
       loadGeoJson("geohashes");
     }
   });
@@ -37,7 +38,7 @@ window.onload = () => {
       attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
     }
   ).addTo(map);
-  var dataLayer, label;
+
   const loadGeoJson = (ghs) => {
     let path = ghs === "geohashes" ? "geohashes" : `pts_${ghs}`;
     if (dataLayer) {
@@ -48,7 +49,7 @@ window.onload = () => {
         }
       }
       map.removeLayer(dataLayer);
-    }; 
+    }
     fetch(`${baseURL + path}.geojson`)
       .then(function (response) {
         return response.json();
@@ -83,14 +84,13 @@ window.onload = () => {
                   html: "",
                   iconSize: [0, 0],
                 }),
-              })
-                .bindTooltip(feature.properties.ghs.substring(3), {
-                  permanent: true,
-                  opacity: 0.7,
-                  direction: "center",
-                  className: "label",
-                });
-                markers.addLayer(label);
+              }).bindTooltip(feature.properties.ghs.substring(3), {
+                permanent: true,
+                opacity: 0.7,
+                direction: "center",
+                className: "label",
+              });
+              markers.addLayer(label);
               layer
                 .bindTooltip(
                   `Densidade: <b>${Math.round(
@@ -135,6 +135,7 @@ window.onload = () => {
           /*****************************************************************************
            * Load Points
            *****************************************************************************/
+          isMosaic = false;
           dataLayer = L.geoJSON(data, {
             // onEachFeature: onEachFeature,
             pointToLayer: function (feature, latlng) {
@@ -159,6 +160,6 @@ window.onload = () => {
         minZoom = map.getZoom() - 2;
         map.options.minZoom = minZoom;
       });
-  };;
+  };
   loadGeoJson(ghs);
 }; //window onload
