@@ -7,6 +7,7 @@ window.onload = () => {
     "https://raw.githubusercontent.com/digital-guard/preservCutGeo-BR2021/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress/";
   const colors = chroma.scale("YlGnBu");
   const normalize = (val, max, min) => (val - min) / (max - min);
+  const ghsList = document.getElementById("geohashes");
 
   let minZoom = 10;
   let isMosaic = true;
@@ -75,6 +76,10 @@ window.onload = () => {
             }),
             onEachFeature: (feature, layer) => {
               let center = layer.getBounds().getCenter();
+              let li = document.createElement("li");
+              var text = document.createTextNode(feature.properties.ghs);
+              li.appendChild(text);
+              ghsList.appendChild(li);
               label = L.marker(center, {
                 icon: L.divIcon({
                   html: "",
