@@ -78,9 +78,9 @@ window.onload = () => {
             }),
             onEachFeature: (feature, layer) => {
               let center = layer.getBounds().getCenter();
-
+              let ghs = feature.properties.ghs;
               let li = document.createElement("li");
-              li.innerHTML = `<a href="?${feature.properties.ghs}">${feature.properties.ghs}</a>`;
+              li.innerHTML = `<a href="?${ghs}">${ghs}</a>`;
               ghsList.appendChild(li);
 
               label = L.marker(center, {
@@ -88,7 +88,7 @@ window.onload = () => {
                   html: "",
                   iconSize: [0, 0],
                 }),
-              }).bindTooltip(feature.properties.ghs.substring(3), {
+              }).bindTooltip(ghs.substring(3), {
                 permanent: true,
                 opacity: 0.7,
                 direction: "center",
@@ -128,9 +128,8 @@ window.onload = () => {
                   });
                 })
                 .on("mouseup", () => {
-                  // window.location.href = `?${feature.properties.ghs}`;
-                  console.log(feature.properties.ghs);
-                  loadGeoJson(feature.properties.ghs);
+                  // window.location.href = `?${ghs}`;
+                  loadGeoJson(ghs);
                 });
             },
           });

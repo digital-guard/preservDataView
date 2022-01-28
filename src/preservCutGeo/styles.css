@@ -14,6 +14,21 @@ h1 {
 	/* width: 100%; */
 }
 
+#geohashes {
+	list-style-type: none;
+	padding-left: 1rem;
+}
+
+#geohashes a {
+	text-decoration: none;
+	/* display:list-item; */
+	padding: .15rem .3rem;
+}
+
+#geohashes a:hover{
+	background-color: #ffa500;
+}
+
 .leaflet-popup em {
 	font-weight: 400;
 	color: darkgray;
@@ -58,7 +73,8 @@ h1 {
 	border-bottom: 1px solid #ddd;
 }
 
-.styled-table tbody tr:nth-of-type(even) {
+.styled-table tbody tr:nth-of-type(even),
+#ghsLis li {
 	background-color: #f2f2f2;
 }
 
