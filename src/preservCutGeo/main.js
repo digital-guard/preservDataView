@@ -1,5 +1,6 @@
 window.onload = () => {
   const LocationSearch = document.location.search.replace("?", "");
+  console.log(document.location);
   const ghs = LocationSearch || "geohashes";
   const mapStyle = ghs === "geohashes" ? "light-v10" : "streets-v11";
   const orange = chroma("orange").hex();
@@ -61,6 +62,7 @@ window.onload = () => {
           );
           let max = Math.max(...densities);
           let min = Math.min(...densities);
+          ghsList.innerHTML = "";
           dataLayer = L.geoJSON(data, {
             style: (feature) => ({
               fillColor: colors(
@@ -80,7 +82,7 @@ window.onload = () => {
               let li = document.createElement("li");
               li.innerHTML = `<a href="?${feature.properties.ghs}">${feature.properties.ghs}</a>`;
               ghsList.appendChild(li);
-              
+
               label = L.marker(center, {
                 icon: L.divIcon({
                   html: "",
@@ -138,6 +140,7 @@ window.onload = () => {
            * Load Points
            *****************************************************************************/
           isMosaic = false;
+          ghsList.innerHTML = `<li><a href="${document.location.origin}${document.location.pathname}">Back to Mosaic</a></li>`;
           dataLayer = L.geoJSON(data, {
             // onEachFeature: onEachFeature,
             pointToLayer: function (feature, latlng) {
@@ -158,7 +161,7 @@ window.onload = () => {
         }
         dataLayer.addTo(map);
         map.fitBounds(dataLayer.getBounds());
-        map.setMaxBounds(map.getBounds());
+        // map.setMaxBounds(map.getBounds());
         minZoom = map.getZoom() - 2;
         map.options.minZoom = minZoom;
       });
