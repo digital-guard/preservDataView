@@ -78,7 +78,7 @@ window.onload = () => {
               let center = layer.getBounds().getCenter();
 
               let li = document.createElement("li");
-              li.innerHTML = `<a href="#">${feature.properties.ghs}</a>`;
+              li.innerHTML = `<a href="?${feature.properties.ghs}">${feature.properties.ghs}</a>`;
               ghsList.appendChild(li);
               
               label = L.marker(center, {
