@@ -76,10 +76,11 @@ window.onload = () => {
             }),
             onEachFeature: (feature, layer) => {
               let center = layer.getBounds().getCenter();
+
               let li = document.createElement("li");
-              var text = document.createTextNode(feature.properties.ghs);
-              li.appendChild(text);
+              li.innerHTML = `<a href="#">${feature.properties.ghs}</a>`;
               ghsList.appendChild(li);
+              
               label = L.marker(center, {
                 icon: L.divIcon({
                   html: "",
