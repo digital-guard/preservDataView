@@ -1,3 +1,7 @@
+/*
+ * Main script, load and draw the GeoJSON features and prepare it interface.
+ */
+
 window.onload = () => {
   const LocationSearch = document.location.search.replace("?", "");
   console.log(document.location);
@@ -8,7 +12,9 @@ window.onload = () => {
     "https://raw.githubusercontent.com/digital-guard/preservCutGeo-BR2021/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress/";
   const colors = chroma.scale("YlGnBu");
   const normalize = (val, max, min) => (val - min) / (max - min);
-  const ghsList = document.getElementById("geohashes");
+  const ghsList_back = document.getElementById("geohashes_button");
+  const ghsList_tBody = document.getElementById("ghs_table_body");
+  const ghs_prefix_len = 3;
 
   let minZoom = 10;
   let isMosaic = true;
@@ -62,7 +68,9 @@ window.onload = () => {
           );
           let max = Math.max(...densities);
           let min = Math.min(...densities);
-          ghsList.innerHTML = "";
+          ghsList_back.innerHTML = '';
+          ghsList_tBody.innerHTML = '';
+
           dataLayer = L.geoJSON(data, {
             style: (feature) => ({
               fillColor: colors(
@@ -79,16 +87,22 @@ window.onload = () => {
             onEachFeature: (feature, layer) => {
               let center = layer.getBounds().getCenter();
               let ghs = feature.properties.ghs;
-              let li = document.createElement("li");
-              li.innerHTML = `<a href="?${ghs}">${ghs}</a>`;
-              ghsList.appendChild(li);
+
+              //let li = document.createElement("li");
+              //li.innerHTML = `<a href="?${ghs}">${ghs}</a>`;
+              let ghs_tr = document.createElement("tr");
+              let ghs_bold = ghs.substring(0,ghs_prefix_len) + '<b>'+ghs.substring(ghs_prefix_len)+'</b>';
+              ghs_tr.innerHTML = `<td><a href="?${ghs}"><code>${ghs_bold}</code></a></td> <td>${feature.properties.val}</td> <td>${Math.round(feature.properties.val_density_km2)}</td>`
+
+              //ghsList_back.appendChild(li);
+              ghsList_tBody.appendChild(ghs_tr);
 
               label = L.marker(center, {
                 icon: L.divIcon({
                   html: "",
                   iconSize: [0, 0],
                 }),
-              }).bindTooltip(ghs.substring(3), {
+              }).bindTooltip(ghs.substring(ghs_prefix_len), {
                 permanent: true,
                 opacity: 0.7,
                 direction: "center",
@@ -101,7 +115,7 @@ window.onload = () => {
                     feature.properties.val_density_km2
                   )} pts/km²</b><br/>Volumetria: <b>${
                     feature.properties.val
-                  } pts</b><br/>... Clique para ver os pontos<br/>do Geohash <b>${
+                  } pts</b><hr/>Clique para ver os pontos<br/>do Geohash <b>${
                     feature.properties.ghs
                   }</b>`,
                   {
@@ -139,7 +153,8 @@ window.onload = () => {
            * Load Points
            *****************************************************************************/
           isMosaic = false;
-          ghsList.innerHTML = `<li><a href="${document.location.origin}${document.location.pathname}">Back to Mosaic</a></li>`;
+          // falta acrescebtar botão antes da tabela ghsList_tBody
+          ghsList_back.innerHTML = `<li><a href=".">Back to Mosaic</a></li>`;
           dataLayer = L.geoJSON(data, {
             // onEachFeature: onEachFeature,
             pointToLayer: function (feature, latlng) {

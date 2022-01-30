@@ -14,18 +14,18 @@ h1 {
 	/* width: 100%; */
 }
 
-#geohashes {
+#geohashes_button {
 	list-style-type: none;
 	padding-left: 1rem;
 }
 
-#geohashes a {
+#geohashes_button a {
 	text-decoration: none;
 	/* display:list-item; */
 	padding: .15rem .3rem;
 }
 
-#geohashes a:hover{
+#geohashes_button a:hover{
 	background-color: #ffa500;
 }
 
@@ -85,3 +85,22 @@ h1 {
 .styled-table tbody tr.active-row {
 	background-color: #ffa500;
 }
+
+
+
+table#ghs_table tr:hover,
+td.dataselector:hover { background-color: yellow; }
+
+table#ghs_table tbody {
+  display: block;
+  max-height: 180pt;
+  overflow-y: scroll;
+}
+table#ghs_table thead,
+table#ghs_table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+table#ghs_table b { font-weight: bold }
+table#ghs_table code b { font-size: 12pt }
