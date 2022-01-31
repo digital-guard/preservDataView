@@ -26,17 +26,20 @@ window.onload = () => {
   ); // no Leaflet advertisement!
 
   map.on("zoom", function () {
+    console.log(minZoom);
+    console.log(map.getZoom());
     if (map.getZoom() <= minZoom && !isMosaic) {
-      console.log(minZoom);
       loadGeoJson("geohashes");
     }
   });
+
   const tiles = L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
     {
-      minZoom: minZoom,
+      // minZoom: 8,
       maxZoom: 25,
-      id: `mapbox/${mapStyle}`,
+      // id: `mapbox/${mapStyle}`,
+      id: "mapbox/light-v10",
       tileSize: 512,
       zoomOffset: -1,
       attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
