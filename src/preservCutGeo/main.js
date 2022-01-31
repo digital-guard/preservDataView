@@ -102,15 +102,16 @@ window.onload = () => {
 
               label = L.marker(center, {
                 icon: L.divIcon({
-                  html: "",
-                  iconSize: [0, 0],
+                  html: ghs.substring(ghs_prefix_len),
+                  className: "label"
                 }),
-              }).bindTooltip(ghs.substring(ghs_prefix_len), {
-                permanent: true,
-                opacity: 0.7,
-                direction: "center",
-                className: "label",
               });
+              //   .bindTooltip(ghs.substring(ghs_prefix_len), {
+              //   permanent: true,
+              //   opacity: 0.7,
+              //   direction: "center",
+              //   className: "label",
+              // });
               markers.addLayer(label);
               layer
                 .bindTooltip(
