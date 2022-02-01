@@ -16,24 +16,20 @@ window.onload = () => {
   const ghsList_tBody = document.getElementById("ghs_table_body");
   const ghs_prefix_len = 3;
 
-  let minZoom = 10;
-  let isMosaic = true;
-  let dataLayer, label;
-
-  const map = L.map("map").setView([-23.550385, -46.633956], 10);
-  map.attributionControl.setPrefix(
-    '<a title="© tile data" target="_copyr" href="https://www.OSM.org/copyright">OSM</a>'
-  ); // no Leaflet advertisement!
-
-  map.on("zoom", function () {
-    console.log(minZoom);
-    console.log(map.getZoom());
-    if (map.getZoom() <= minZoom && !isMosaic) {
-      loadGeoJson("geohashes");
+  const streets = L.tileLayer(
+    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+    {
+      // minZoom: 8,
+      maxZoom: 25,
+      // id: `mapbox/${mapStyle}`,
+      id: "mapbox/streets-v11",
+      tileSize: 512,
+      zoomOffset: -1,
+      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
     }
-  });
+  );
 
-  const tiles = L.tileLayer(
+  const grayScale = L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
     {
       // minZoom: 8,
@@ -44,7 +40,80 @@ window.onload = () => {
       zoomOffset: -1,
       attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
     }
-  ).addTo(map);
+  );
+
+  const satellite = L.tileLayer(
+    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+    {
+      // minZoom: 8,
+      maxZoom: 25,
+      // id: `mapbox/${mapStyle}`,
+      id: "mapbox/satellite-v9",
+      tileSize: 512,
+      zoomOffset: -1,
+      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+    }
+  );
+
+  const satelliteStreets = L.tileLayer(
+    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+    {
+      // minZoom: 8,
+      maxZoom: 25,
+      // id: `mapbox/${mapStyle}`,
+      id: "mapbox/satellite-streets-v11",
+      tileSize: 512,
+      zoomOffset: -1,
+      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+    }
+  );
+  const baseMaps = {
+    "Satellite": satellite,
+    "Satellite Streets": satelliteStreets,
+    "Streets": streets,
+    "Grayscale": grayScale,
+  };
+
+  const overlayMaps = {
+    // "Mosaic": mosaic,
+    // "Addresses": addresses,
+  };
+
+  let minZoom = 10;
+  let isMosaic = true;
+  let dataLayer, label;
+
+  const map = L.map("map", {
+    center: [-23.550385, -46.633956],
+    zoom: 10,
+    layers: [grayScale, streets, satellite, satelliteStreets],
+  }).setView([-23.550385, -46.633956], 10);
+  map.attributionControl.setPrefix(
+    '<a title="© tile data" target="_copyr" href="https://www.OSM.org/copyright">OSM</a>'
+  ); // no Leaflet advertisement!
+
+  L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+  map.on("zoom", function () {
+    console.log(minZoom);
+    console.log(map.getZoom());
+    if (map.getZoom() <= minZoom && !isMosaic) {
+      loadGeoJson("geohashes");
+    }
+  });
+
+  // const tiles = L.tileLayer(
+  //   "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+  //   {
+  //     // minZoom: 8,
+  //     maxZoom: 25,
+  //     // id: `mapbox/${mapStyle}`,
+  //     id: "mapbox/light-v10",
+  //     tileSize: 512,
+  //     zoomOffset: -1,
+  //     attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+  //   }
+  // ).addTo(map);
 
   const markers = L.layerGroup();
   const loadGeoJson = (ghs) => {
@@ -71,8 +140,8 @@ window.onload = () => {
           );
           let max = Math.max(...densities);
           let min = Math.min(...densities);
-          ghsList_back.innerHTML = '';
-          ghsList_tBody.innerHTML = '';
+          ghsList_back.innerHTML = "";
+          ghsList_tBody.innerHTML = "";
 
           dataLayer = L.geoJSON(data, {
             style: (feature) => ({
@@ -94,8 +163,16 @@ window.onload = () => {
               //let li = document.createElement("li");
               //li.innerHTML = `<a href="?${ghs}">${ghs}</a>`;
               let ghs_tr = document.createElement("tr");
-              let ghs_bold = ghs.substring(0,ghs_prefix_len) + '<b>'+ghs.substring(ghs_prefix_len)+'</b>';
-              ghs_tr.innerHTML = `<td><a href="?${ghs}"><code>${ghs_bold}</code></a></td> <td>${feature.properties.val}</td> <td>${Math.round(feature.properties.val_density_km2)}</td>`
+              let ghs_bold =
+                ghs.substring(0, ghs_prefix_len) +
+                "<b>" +
+                ghs.substring(ghs_prefix_len) +
+                "</b>";
+              ghs_tr.innerHTML = `<td><a href="?${ghs}"><code>${ghs_bold}</code></a></td> <td>${
+                feature.properties.val
+              }</td> <td>${Math.round(
+                feature.properties.val_density_km2
+              )}</td>`;
 
               //ghsList_back.appendChild(li);
               ghsList_tBody.appendChild(ghs_tr);
@@ -103,7 +180,7 @@ window.onload = () => {
               label = L.marker(center, {
                 icon: L.divIcon({
                   html: ghs.substring(ghs_prefix_len),
-                  className: "label"
+                  className: "label",
                 }),
               });
               //   .bindTooltip(ghs.substring(ghs_prefix_len), {
