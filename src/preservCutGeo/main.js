@@ -4,7 +4,7 @@
 
 window.onload = () => {
   const LocationSearch = document.location.search.replace("?", "");
-  console.log(document.location);
+  // console.log(document.location);
   const ghs = LocationSearch || "geohashes";
   // const mapStyle = ghs === "geohashes" ? "light-v10" : "streets-v11";
   const orange = chroma("orange").hex();
@@ -16,12 +16,13 @@ window.onload = () => {
   const ghsList_tBody = document.getElementById("ghs_table_body");
   const ghs_prefix_len = 3;
 
+  new Tablesort(document.getElementById("ghs_table"));
+
   const streets = L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
     {
       // minZoom: 8,
       maxZoom: 25,
-      // id: `mapbox/${mapStyle}`,
       id: "mapbox/streets-v11",
       tileSize: 512,
       zoomOffset: -1,
@@ -34,7 +35,6 @@ window.onload = () => {
     {
       // minZoom: 8,
       maxZoom: 25,
-      // id: `mapbox/${mapStyle}`,
       id: "mapbox/light-v10",
       tileSize: 512,
       zoomOffset: -1,
@@ -47,7 +47,6 @@ window.onload = () => {
     {
       // minZoom: 8,
       maxZoom: 25,
-      // id: `mapbox/${mapStyle}`,
       id: "mapbox/satellite-v9",
       tileSize: 512,
       zoomOffset: -1,
@@ -60,7 +59,6 @@ window.onload = () => {
     {
       // minZoom: 8,
       maxZoom: 25,
-      // id: `mapbox/${mapStyle}`,
       id: "mapbox/satellite-streets-v11",
       tileSize: 512,
       zoomOffset: -1,
@@ -101,6 +99,7 @@ window.onload = () => {
       loadGeoJson("geohashes");
     }
   });
+
   const markers = L.layerGroup();
   const loadGeoJson = (ghs) => {
     let path = ghs === "geohashes" ? "geohashes" : `pts_${ghs}`;
