@@ -34,12 +34,12 @@ h1 {
 	color: darkgray;
 }
 
-.label {
+.label,
+.leaflet-div-icon {
 	background: none;
 	border: none;
 	box-shadow: none;
-	/* font-weight: 500; */
-	line-height: 1rem;
+	font-weight: 500;
 }
 
 .leaflet-tooltip.tooltip {

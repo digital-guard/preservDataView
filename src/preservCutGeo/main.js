@@ -6,7 +6,7 @@ window.onload = () => {
   const LocationSearch = document.location.search.replace("?", "");
   console.log(document.location);
   const ghs = LocationSearch || "geohashes";
-  const mapStyle = ghs === "geohashes" ? "light-v10" : "streets-v11";
+  // const mapStyle = ghs === "geohashes" ? "light-v10" : "streets-v11";
   const orange = chroma("orange").hex();
   const baseURL =
     "https://raw.githubusercontent.com/digital-guard/preservCutGeo-BR2021/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress/";
@@ -101,20 +101,6 @@ window.onload = () => {
       loadGeoJson("geohashes");
     }
   });
-
-  // const tiles = L.tileLayer(
-  //   "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
-  //   {
-  //     // minZoom: 8,
-  //     maxZoom: 25,
-  //     // id: `mapbox/${mapStyle}`,
-  //     id: "mapbox/light-v10",
-  //     tileSize: 512,
-  //     zoomOffset: -1,
-  //     attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-  //   }
-  // ).addTo(map);
-
   const markers = L.layerGroup();
   const loadGeoJson = (ghs) => {
     let path = ghs === "geohashes" ? "geohashes" : `pts_${ghs}`;
@@ -135,8 +121,8 @@ window.onload = () => {
           /*****************************************************************************
            * Load Mosaic
            *****************************************************************************/
-          let densities = data.features.map((a) =>
-            Math.round(a.properties.val_density_km2)
+          let densities = data.features.map(
+            (a) => a.properties.val_density_km2
           );
           let max = Math.max(...densities);
           let min = Math.min(...densities);
@@ -179,16 +165,15 @@ window.onload = () => {
 
               label = L.marker(center, {
                 icon: L.divIcon({
-                  html: ghs.substring(ghs_prefix_len),
-                  className: "label",
+                  html: "",
+                  size: [0, 0],
                 }),
+              }).bindTooltip(ghs.substring(ghs_prefix_len), {
+                permanent: true,
+                opacity: 0.7,
+                direction: "center",
+                className: "label",
               });
-              //   .bindTooltip(ghs.substring(ghs_prefix_len), {
-              //   permanent: true,
-              //   opacity: 0.7,
-              //   direction: "center",
-              //   className: "label",
-              // });
               markers.addLayer(label);
               layer
                 .bindTooltip(
