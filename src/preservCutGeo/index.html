@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
 		integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
 		crossorigin="" />
+	<link rel="stylesheet" href="assets/tablesort/tablesort.css" />
 	<link rel="stylesheet" href="styles.css" />
 
 </head>
@@ -39,23 +40,25 @@
 		<tbody>
 			<tr>
 				<td class="dataselector" onclick="alert('Avisa que é o mapa ativo, layer geoaddress')">
-					<img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-geoaddress.png"> <strong>geoaddress</strong> (geo-endereço)
+					<img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-geoaddress.png">
+					<strong>geoaddress</strong> (geo-endereço)
 				</td>
 				<td>
 					<a title="SHA256 1ce29a555565be5f540ab0c6f93ac55797c368293e0a6bfb479a645a5a23f542"
 						href="http://dl.digital-guard.org/1ce29a555565be5f540ab0c6f93ac55797c368293e0a6bfb479a645a5a23f542.zip"><code>1ce29a5...zip</code></a>
-					690681 pontos; densidade média de 2667 pontos/km² (mediana 2627)<br/>(42826370 bytes • 40,84 MiB)</td>
+					690681 pontos; densidade média de 2667 pontos/km² (mediana 2627)<br />(42826370 bytes • 40,84 MiB)</td>
 				<td>Representação geográfica do endereço, como ponto.<br><code>make geoaddress</code></td>
 			</tr>
 			<tr>
 				<td class="dataselector" onclick="alert('Muda o mapa, mostra mosaico de navegação do layer via')"
 					title="clique para mudar o mapa para este layer">
-					<img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-via.png"> <strong>via</strong> (eixo de via)
+					<img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-via.png">
+					<strong>via</strong> (eixo de via)
 				</td>
 				<td>
 					<a title="SHA256 7d7d0661683a8eebd95d544c47dd0e254fc75e3d916fe9900a3bd9fb7b2cc378"
 						href="http://dl.digital-guard.org/7d7d0661683a8eebd95d544c47dd0e254fc75e3d916fe9900a3bd9fb7b2cc378.zip"><code>7d7d066...zip</code></a>
-					xxx vias totalizando xx km; densidade média de xx vias/km²<br/> (2637788 bytes • 2,52 MiB)</td>
+					xxx vias totalizando xx km; densidade média de xx vias/km²<br /> (2637788 bytes • 2,52 MiB)</td>
 				<td>Logradouro representado por linha central, com nome oficial e codlog opcional.<br /><code>make via</code>
 				</td>
 			</tr>
@@ -82,11 +85,11 @@
 
 	<table id="ghs_table" width="300" align="center">
 		<thead>
-				<tr>
-				 <td width="100"><b>Geohashes</b></td>
-				 <td width="100"><b>Items</b></td>
-				 <td width="100"><b>Items/km²</b></td>
-			 </tr>
+			<tr>
+				<td width="100"><b>Geohashes</b></td>
+				<td width="100"><b>Items</b></td>
+				<td width="100"><b>Items/km²</b></td>
+			</tr>
 		</thead>
 		<tbody id="ghs_table_body"></tbody>
 	</table>
@@ -108,6 +111,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.1.2/chroma.min.js"
 		integrity="sha512-8TVPS0EFkkmtT6yPb5K4csnSt3tjbKRrs0F8gvTNKv2OxOcwDO7+Klkz86gMVrzfqtZos5N2a+k+r9D+hlccmQ=="
 		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="assets/tablesort/tablesort.min.js"></script>
 	<script src="main.js"></script>
 
 </body>
