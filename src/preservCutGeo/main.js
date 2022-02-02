@@ -110,11 +110,14 @@ function ghsList(data) {
   ghsList_tBody.innerHTML = "";
   features.forEach((feature) => {
     let ghs = feature.properties.ghs;
-    let ghs_bold = ghs.substring(0, ghs_prefix_len) +
+    let ghs_bold =
+      ghs.substring(0, ghs_prefix_len) +
       "<b>" +
       ghs.substring(ghs_prefix_len) +
       "</b>";
-    ghsList_tBody.innerHTML += `<tr id="${ghs}" onclick='setAddresses("${ghs}");'><td><code>${ghs_bold}</code></td><td>${feature.properties.val}</td><td>${Math.round(feature.properties.val_density_km2)}</td></tr>`;
+    ghsList_tBody.innerHTML += `<tr id="${ghs}" onclick='setAddresses("${ghs}");'><td><code>${ghs_bold}</code></td><td>${
+      feature.properties.val
+    }</td><td>${Math.round(feature.properties.val_density_km2)}</td></tr>`;
   });
   new Tablesort(document.getElementById("ghs_table"));
 }
@@ -123,8 +126,8 @@ function clearSelectedRows() {
   let selected = document.getElementsByClassName("selected");
   for (let i = 0; i < selected.length; i++) {
     selected[i].classList.remove("selected");
-  };
-};
+  }
+}
 
 function clearAddresses() {
   addressesL.clearLayers();
@@ -242,8 +245,11 @@ window.onload = () => {
 
   map.on("zoom", function () {
     let currentZoom = map.getZoom();
-    if (currentZoom <= 10) {
-      clearAddresses();
+    if (currentZoom <= minZoom) {
+      if (hasAddresses) {
+        clearAddresses();
+      }
+      //show mosaic if it is hidden????
       recenterMap();
       markers.eachLayer(function (layer) {
         if (layer.isTooltipOpen()) {
@@ -256,11 +262,6 @@ window.onload = () => {
           layer.toggleTooltip();
         }
       });
-    }
-    if (map.getZoom() <= minZoom && !isMosaic) {
-      // loadGeoJson("geohashes");
-      // toggleTooltip()
-      // isTooltipOpen()
     }
   });
 
