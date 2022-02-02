@@ -14,19 +14,22 @@ h1 {
 	/* width: 100%; */
 }
 
-#geohashes_button {
+#buttons {
+	position: relarive;
+	display: block;
+	float: left;
 	list-style-type: none;
 	padding-left: 1rem;
 }
 
-#geohashes_button a {
+#buttons a {
 	text-decoration: none;
 	/* display:list-item; */
 	padding: .15rem .3rem;
 }
 
-#geohashes_button a:hover,
-.selected{
+#buttons a:hover,
+.selected {
 	background-color: #ffa500;
 }
 
@@ -71,12 +74,14 @@ h1 {
 	vertical-align: middle;
 	margin-right: .4rem;
 }
-.styled-table tbody tr {
+
+.styled-table tbody tr,
+#ghs_table tbody tr {
 	border-bottom: 1px solid #ddd;
 }
 
 .styled-table tbody tr:nth-of-type(even),
-#ghsLis li {
+#ghs_tabl tbody tr:nth-of-type(even) {
 	background-color: #f2f2f2;
 }
 
@@ -88,21 +93,28 @@ h1 {
 	background-color: #ffa500;
 }
 
-
-
-table#ghs_table tr:hover,
-td.dataselector:hover { background-color: yellow; }
+table#ghs_table tbody tr:hover,
+td.dataselector:hover {
+	background-color: yellow;
+}
 
 table#ghs_table tbody {
-  display: block;
-  max-height: 180pt;
-  overflow-y: scroll;
+	display: block;
+	max-height: 180pt;
+	overflow-y: scroll;
 }
+
 table#ghs_table thead,
 table#ghs_table tbody tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
+	display: table;
+	width: 100%;
+	table-layout: fixed;
 }
-table#ghs_table b { font-weight: bold }
-table#ghs_table code b { font-size: 12pt }
+
+table#ghs_table b {
+	font-weight: bold
+}
+
+table#ghs_table code b {
+	font-size: 12pt
+}
