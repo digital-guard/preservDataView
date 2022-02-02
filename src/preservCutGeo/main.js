@@ -18,31 +18,8 @@ window.onload = () => {
 
   new Tablesort(document.getElementById("ghs_table"));
 
-  const streets = L.tileLayer(
-    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
-    {
-      // minZoom: 8,
-      maxZoom: 25,
-      id: "mapbox/streets-v11",
-      tileSize: 512,
-      zoomOffset: -1,
-      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-    }
-  );
-
-  const grayScale = L.tileLayer(
-    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
-    {
-      // minZoom: 8,
-      maxZoom: 25,
-      id: "mapbox/light-v10",
-      tileSize: 512,
-      zoomOffset: -1,
-      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-    }
-  );
-
-  const satellite = L.tileLayer(
+  const baseMaps = {
+    "Satellite": L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
     {
       // minZoom: 8,
@@ -52,9 +29,8 @@ window.onload = () => {
       zoomOffset: -1,
       attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
     }
-  );
-
-  const satelliteStreets = L.tileLayer(
+  ),
+    "Satellite Streets": L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
     {
       // minZoom: 8,
@@ -64,17 +40,29 @@ window.onload = () => {
       zoomOffset: -1,
       attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
     }
-  );
-  const baseMaps = {
-    "Satellite": satellite,
-    "Satellite Streets": satelliteStreets,
-    "Streets": streets,
-    "Grayscale": grayScale,
-  };
-
-  const overlayMaps = {
-    // "Mosaic": mosaic,
-    // "Addresses": addresses,
+  ),
+    "Streets": L.tileLayer(
+    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+    {
+      // minZoom: 8,
+      maxZoom: 25,
+      id: "mapbox/streets-v11",
+      tileSize: 512,
+      zoomOffset: -1,
+      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+    }
+  ),
+    "Grayscale": L.tileLayer(
+    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+    {
+      // minZoom: 8,
+      maxZoom: 25,
+      id: "mapbox/light-v10",
+      tileSize: 512,
+      zoomOffset: -1,
+      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+    }
+  ),
   };
 
   let minZoom = 10;
@@ -84,12 +72,22 @@ window.onload = () => {
   const map = L.map("map", {
     center: [-23.550385, -46.633956],
     zoom: 10,
-    layers: [grayScale, streets, satellite, satelliteStreets],
+    layers: [
+      baseMaps.Grayscale,
+      baseMaps.Streets,
+      baseMaps.Satellite,
+      baseMaps["Satellite Streets"],
+    ],
   }).setView([-23.550385, -46.633956], 10);
   map.attributionControl.setPrefix(
     '<a title="© tile data" target="_copyr" href="https://www.OSM.org/copyright">OSM</a>'
   ); // no Leaflet advertisement!
 
+  // const mosaic = loadGeoJson("geohashes");
+  const overlayMaps = {
+    // Mosaic: mosaic,
+    // "Addresses": addresses,
+  };
   L.control.layers(baseMaps, overlayMaps).addTo(map);
 
   map.on("zoom", function () {
