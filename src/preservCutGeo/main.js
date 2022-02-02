@@ -1,6 +1,48 @@
 /*
  * Main script, load and draw the GeoJSON features and prepare it interface.
  */
+const ghs_prefix_len = 3;
+
+async function loadData(ghs) {
+  const baseURL =
+    "https://raw.githubusercontent.com/digital-guard/preservCutGeo-BR2021/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress/";
+  let path = ghs === "geohashes" ? "geohashes" : `pts_${ghs}`;
+  const response = await fetch(`${baseURL + path}.geojson`);
+  const geojson = await response.json();
+  return geojson
+}
+
+async function ghsList() {
+  const data = await loadData("geohashes");
+  const features = data.features;
+  const ghsList_tBody = document.getElementById("ghs_table_body");
+  features.forEach(feature => {
+    console.log(feature.properties);
+    let ghs = feature.properties.ghs;
+
+    //let li = document.createElement("li");
+    //li.innerHTML = `<a href="?${ghs}">${ghs}</a>`;
+    let ghs_tr = document.createElement("tr");
+    let ghs_bold =
+      ghs.substring(0, ghs_prefix_len) +
+      "<b>" +
+      ghs.substring(ghs_prefix_len) +
+      "</b>";
+    ghs_tr.innerHTML = `<td><a href="?${ghs}"><code>${ghs_bold}</code></a></td> <td>${
+      feature.properties.val
+    }</td> <td>${Math.round(feature.properties.val_density_km2)}</td>`;
+
+    //ghsList_back.appendChild(li);
+    ghsList_tBody.appendChild(ghs_tr);
+  });
+};
+
+// const test = () => {
+//   async() => {
+//     const myData = await loadData("geohashes");
+//     console.log(myData);
+//   }
+// }
 
 window.onload = () => {
   const LocationSearch = document.location.search.replace("?", "");
@@ -13,90 +55,8 @@ window.onload = () => {
   const colors = chroma.scale("YlGnBu");
   const normalize = (val, max, min) => (val - min) / (max - min);
   const ghsList_back = document.getElementById("geohashes_button");
-  const ghsList_tBody = document.getElementById("ghs_table_body");
-  const ghs_prefix_len = 3;
 
   new Tablesort(document.getElementById("ghs_table"));
-
-  const baseMaps = {
-    "Satellite": L.tileLayer(
-    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
-    {
-      // minZoom: 8,
-      maxZoom: 25,
-      id: "mapbox/satellite-v9",
-      tileSize: 512,
-      zoomOffset: -1,
-      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-    }
-  ),
-    "Satellite Streets": L.tileLayer(
-    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
-    {
-      // minZoom: 8,
-      maxZoom: 25,
-      id: "mapbox/satellite-streets-v11",
-      tileSize: 512,
-      zoomOffset: -1,
-      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-    }
-  ),
-    "Streets": L.tileLayer(
-    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
-    {
-      // minZoom: 8,
-      maxZoom: 25,
-      id: "mapbox/streets-v11",
-      tileSize: 512,
-      zoomOffset: -1,
-      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-    }
-  ),
-    "Grayscale": L.tileLayer(
-    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
-    {
-      // minZoom: 8,
-      maxZoom: 25,
-      id: "mapbox/light-v10",
-      tileSize: 512,
-      zoomOffset: -1,
-      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-    }
-  ),
-  };
-
-  let minZoom = 10;
-  let isMosaic = true;
-  let dataLayer, label;
-
-  const map = L.map("map", {
-    center: [-23.550385, -46.633956],
-    zoom: 10,
-    layers: [
-      baseMaps.Grayscale,
-      baseMaps.Streets,
-      baseMaps.Satellite,
-      baseMaps["Satellite Streets"],
-    ],
-  }).setView([-23.550385, -46.633956], 10);
-  map.attributionControl.setPrefix(
-    '<a title="© tile data" target="_copyr" href="https://www.OSM.org/copyright">OSM</a>'
-  ); // no Leaflet advertisement!
-
-  // const mosaic = loadGeoJson("geohashes");
-  const overlayMaps = {
-    // Mosaic: mosaic,
-    // "Addresses": addresses,
-  };
-  L.control.layers(baseMaps, overlayMaps).addTo(map);
-
-  map.on("zoom", function () {
-    console.log(minZoom);
-    console.log(map.getZoom());
-    if (map.getZoom() <= minZoom && !isMosaic) {
-      loadGeoJson("geohashes");
-    }
-  });
 
   const markers = L.layerGroup();
   const loadGeoJson = (ghs) => {
@@ -123,8 +83,8 @@ window.onload = () => {
           );
           let max = Math.max(...densities);
           let min = Math.min(...densities);
-          ghsList_back.innerHTML = "";
-          ghsList_tBody.innerHTML = "";
+          // ghsList_back.innerHTML = "";
+          // ghsList_tBody.innerHTML = "";
 
           dataLayer = L.geoJSON(data, {
             style: (feature) => ({
@@ -142,24 +102,6 @@ window.onload = () => {
             onEachFeature: (feature, layer) => {
               let center = layer.getBounds().getCenter();
               let ghs = feature.properties.ghs;
-
-              //let li = document.createElement("li");
-              //li.innerHTML = `<a href="?${ghs}">${ghs}</a>`;
-              let ghs_tr = document.createElement("tr");
-              let ghs_bold =
-                ghs.substring(0, ghs_prefix_len) +
-                "<b>" +
-                ghs.substring(ghs_prefix_len) +
-                "</b>";
-              ghs_tr.innerHTML = `<td><a href="?${ghs}"><code>${ghs_bold}</code></a></td> <td>${
-                feature.properties.val
-              }</td> <td>${Math.round(
-                feature.properties.val_density_km2
-              )}</td>`;
-
-              //ghsList_back.appendChild(li);
-              ghsList_tBody.appendChild(ghs_tr);
-
               label = L.marker(center, {
                 icon: L.divIcon({
                   html: "",
@@ -243,5 +185,88 @@ window.onload = () => {
         map.options.minZoom = minZoom;
       });
   };
+
+  const baseMaps = {
+    Satellite: L.tileLayer(
+      "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+      {
+        // minZoom: 8,
+        maxZoom: 25,
+        id: "mapbox/satellite-v9",
+        tileSize: 512,
+        zoomOffset: -1,
+        attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+      }
+    ),
+    "Satellite Streets": L.tileLayer(
+      "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+      {
+        // minZoom: 8,
+        maxZoom: 25,
+        id: "mapbox/satellite-streets-v11",
+        tileSize: 512,
+        zoomOffset: -1,
+        attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+      }
+    ),
+    Streets: L.tileLayer(
+      "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+      {
+        // minZoom: 8,
+        maxZoom: 25,
+        id: "mapbox/streets-v11",
+        tileSize: 512,
+        zoomOffset: -1,
+        attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+      }
+    ),
+    Grayscale: L.tileLayer(
+      "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+      {
+        // minZoom: 8,
+        maxZoom: 25,
+        id: "mapbox/light-v10",
+        tileSize: 512,
+        zoomOffset: -1,
+        attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+      }
+    ),
+  };
+
+  let minZoom = 10;
+  let isMosaic = true;
+  let dataLayer, label;
+
+  const map = L.map("map", {
+    center: [-23.550385, -46.633956],
+    zoom: 10,
+    layers: [
+      baseMaps.Grayscale,
+      baseMaps.Streets,
+      baseMaps.Satellite,
+      baseMaps["Satellite Streets"],
+    ],
+  }).setView([-23.550385, -46.633956], 10);
+  map.attributionControl.setPrefix(
+    '<a title="© tile data" target="_copyr" href="https://www.OSM.org/copyright">OSM</a>'
+  ); // no Leaflet advertisement!
+
+  // const mosaic = loadGeoJson("geohashes");
+  const overlayMaps = {
+    // Mosaic: mosaic,
+    // "Addresses": addresses,
+  };
+  L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+  map.on("zoom", function () {
+    console.log(minZoom);
+    console.log(map.getZoom());
+    if (map.getZoom() <= minZoom && !isMosaic) {
+      loadGeoJson("geohashes");
+    }
+  });
+
   loadGeoJson(ghs);
+  ghsList();
+  // test();
 }; //window onload
