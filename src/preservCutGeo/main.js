@@ -182,8 +182,6 @@ const mosaic = (data) => {
 
 const addresses = (data) => {
   hasAddresses = true;
-  // falta acrescebtar botão antes da tabela ghsList_tBody
-  // ghsList_back.innerHTML = `<li><a href=".">Back to Mosaic</a></li>`;
   return L.geoJSON(data, {
     // onEachFeature: onEachFeature,
     pointToLayer: function (feature, latlng) {
