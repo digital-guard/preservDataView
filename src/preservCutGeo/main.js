@@ -64,13 +64,6 @@ const overlayMaps = {
   Mosaic: mosaicL,
 };
 
-function clearSelectedRows() {
-  let selected = document.getElementsByClassName("selected");
-  for (let i = 0; i < selected.length; i++) {
-    selected[i].classList.remove("selected");
-  };
-};
-
 let data,
   minZoom = 10,
   isMosaic = true,
@@ -124,6 +117,13 @@ function ghsList(data) {
   });
   new Tablesort(document.getElementById("ghs_table"));
 }
+
+function clearSelectedRows() {
+  let selected = document.getElementsByClassName("selected");
+  for (let i = 0; i < selected.length; i++) {
+    selected[i].classList.remove("selected");
+  };
+};
 
 const mosaic = (data) => {
   isMosaic = true;
