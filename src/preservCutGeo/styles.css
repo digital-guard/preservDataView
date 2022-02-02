@@ -25,7 +25,8 @@ h1 {
 	padding: .15rem .3rem;
 }
 
-#geohashes_button a:hover{
+#geohashes_button a:hover,
+.selected{
 	background-color: #ffa500;
 }
 
