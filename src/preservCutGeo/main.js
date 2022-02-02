@@ -64,7 +64,8 @@ const geohashes = new Set();
 let data,
   minZoom = 10,
   isMosaic = true,
-  hasAddresses = false;
+  hasAddresses = false,
+  remember = true;
 
 async function loadData(ghs) {
   let path = ghs === "geohashes" ? "geohashes" : `pts_${ghs}`;
@@ -82,12 +83,16 @@ async function setMosaic() {
 
 async function setAddresses(ghs) {
   if (!geohashes.has(ghs)) {
-    geohashes.add(ghs);
+    row = document.getElementById(ghs);
     data = await loadData(ghs);
+    if (!remember_tggl.checked) {
+      addressesL.clearLayers();
+      geohashes.clear();
+    }
+    geohashes.add(ghs);
+    row.setAttribute("class", "selected");
     addressesLayer = addresses(data);
     addressesL.addLayer(addressesLayer);
-    row = document.getElementById(ghs);
-    row.setAttribute("class", "selected");
     recenterMap();
   } else {
     alert(`${ghs} is already plotted`);
@@ -212,6 +217,11 @@ window.onload = () => {
     Mosaic: mosaicL,
   };
   const layersControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+  const remember_tggl = document.getElementById("remember_tggl");
+
+  remember_tggl.onchange = () => {
+    remember = !remember_tggl.checked;
+  };
 
   map.attributionControl.setPrefix(
     '<a title="© tile data" target="_copyr" href="https://www.OSM.org/copyright">OSM</a>'
