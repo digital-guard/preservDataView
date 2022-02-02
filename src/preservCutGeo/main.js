@@ -89,9 +89,10 @@ async function setAddresses(ghs) {
     row = document.getElementById(ghs);
     data = await loadData(ghs);
     if (!remember_tggl.checked) {
-      addressesL.clearLayers();
-      geohashes.clear();
-      clearSelectedRows();
+      // addressesL.clearLayers();
+      // geohashes.clear();
+      // clearSelectedRows();
+      clearAddresses();
     }
     geohashes.add(ghs);
     row.setAttribute("class", "selected");
@@ -124,6 +125,13 @@ function clearSelectedRows() {
     selected[i].classList.remove("selected");
   };
 };
+
+function clearAddresses() {
+  addressesL.clearLayers();
+  geohashes.clear();
+  clearSelectedRows();
+  hasAddresses = false;
+}
 
 const mosaic = (data) => {
   isMosaic = true;
@@ -233,8 +241,26 @@ window.onload = () => {
   ); // no Leaflet advertisement!
 
   map.on("zoom", function () {
+    let currentZoom = map.getZoom();
+    if (currentZoom <= 10) {
+      clearAddresses();
+      recenterMap();
+      markers.eachLayer(function (layer) {
+        if (layer.isTooltipOpen()) {
+          layer.closeTooltip();
+        }
+      });
+    } else {
+      markers.eachLayer(function (layer) {
+        if (!layer.isTooltipOpen()) {
+          layer.toggleTooltip();
+        }
+      });
+    }
     if (map.getZoom() <= minZoom && !isMosaic) {
       // loadGeoJson("geohashes");
+      // toggleTooltip()
+      // isTooltipOpen()
     }
   });
 
