@@ -1,7 +1,7 @@
 /*
- * This is the last working/reviewed/approved version. Use it as replacement in case your are not happy with the current one. This version completely fits the forst group of requirements.
+ * This is the latest working/reviewed/approved version. Use it as a replacement in case you are not satisfied with the current one. This version is fully compliant with the first set of requirements.
  *
- * Esta é a última versão de trabalho/revisão/aprovação. Utilize-a como substituição no caso de não estar satisfeito com a actual. Esta versão adapta-se completamente ao primeiro grupo de requisitos.
+ * Esta é a última versão de trabalho/revisão/aprovação. Use-o como um substituto no caso de não estar satisfeito com o atual. Esta versão está em total conformidade com o primeiro conjunto de requisitos.
  */
 
 window.onload = () => {
