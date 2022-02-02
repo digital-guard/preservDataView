@@ -245,12 +245,14 @@ window.onload = () => {
 
   map.on("zoom", function () {
     let currentZoom = map.getZoom();
-    if (currentZoom <= minZoom) {
+    if (currentZoom <= 10) {
       if (hasAddresses) {
         clearAddresses();
       }
       //show mosaic if it is hidden????
-      recenterMap();
+      if (currentZoom <= minZoom) {
+        recenterMap();
+      }
       markers.eachLayer(function (layer) {
         if (layer.isTooltipOpen()) {
           layer.closeTooltip();
