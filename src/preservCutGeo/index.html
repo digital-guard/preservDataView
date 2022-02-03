@@ -34,34 +34,39 @@
 	<table class="styled-table dataselector" align="center" width="90%">
 		<thead>
 			<th>Layer</th>
-			<th>Volumetria e Origem </th>
+			<th>Origem e Volumetria</th>
 			<th>Descrição e extração</th>
 		</thead>
 		<tbody>
+
 			<tr>
 				<td class="dataselector" onclick="alert('Avisa que é o mapa ativo, layer geoaddress')">
 					<img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-geoaddress.png">
-					<strong>geoaddress</strong> (geo-endereço)
+					<strong>geoaddress</strong> (geo&#8209;endereço)
 				</td>
 				<td>
 					<a title="SHA256 1ce29a555565be5f540ab0c6f93ac55797c368293e0a6bfb479a645a5a23f542"
 						href="http://dl.digital-guard.org/1ce29a555565be5f540ab0c6f93ac55797c368293e0a6bfb479a645a5a23f542.zip"><code>1ce29a5...zip</code></a>
-					690681 pontos; densidade média de 2667 pontos/km² (mediana 2627)<br />(42826370 bytes • 40,84 MiB)</td>
+						(42826370 bytes • 40,84 MiB)<br />
+					  690681 pontos; densidade média de ~2650 pontos/km².</td>
 				<td>Representação geográfica do endereço, como ponto.<br><code>make geoaddress</code></td>
 			</tr>
+
 			<tr>
 				<td class="dataselector" onclick="alert('Muda o mapa, mostra mosaico de navegação do layer via')"
 					title="clique para mudar o mapa para este layer">
 					<img src="https://raw.githubusercontent.com/digital-guard/preserv/main/docs/assets/layerIcon-via.png">
-					<strong>via</strong> (eixo de via)
+					<strong>via</strong> (eixo&#160;de&#160;via)
 				</td>
 				<td>
 					<a title="SHA256 7d7d0661683a8eebd95d544c47dd0e254fc75e3d916fe9900a3bd9fb7b2cc378"
 						href="http://dl.digital-guard.org/7d7d0661683a8eebd95d544c47dd0e254fc75e3d916fe9900a3bd9fb7b2cc378.zip"><code>7d7d066...zip</code></a>
-					xxx vias totalizando xx km; densidade média de xx vias/km²<br /> (2637788 bytes • 2,52 MiB)</td>
+						(2637788 bytes • 2,52 MiB)
+					  <br /> 16224 segmentos	totalizando 4877 km de vias;<br/>densidade média de xx km_via/km².</td>
 				<td>Logradouro representado por linha central, com nome oficial e codlog opcional.<br /><code>make via</code>
 				</td>
 			</tr>
+
 		</tbody>
 	</table>
 
