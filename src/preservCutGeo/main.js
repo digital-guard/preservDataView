@@ -116,8 +116,8 @@ function ghsList(data) {
       ghs.substring(ghs_prefix_len) +
       "</b>";
     ghsList_tBody.innerHTML += `<tr id="${ghs}" onclick='setAddresses("${ghs}");'><td><code>${ghs_bold}</code></td><td>${
-      feature.properties.val
-    }</td><td>${Math.round(feature.properties.val_density_km2)}</td></tr>`;
+      feature.properties.ghs_items
+    }</td><td>${Math.round(feature.properties.ghs_itemsdensity)}</td></tr>`;
   });
   new Tablesort(document.getElementById("ghs_table"));
 }
@@ -138,13 +138,13 @@ function clearAddresses() {
 
 const mosaic = (data) => {
   isMosaic = true;
-  let densities = data.features.map((a) => a.properties.val_density_km2);
+  let densities = data.features.map((a) => a.properties.ghs_itemsdensity);
   let max = Math.max(...densities);
   let min = Math.min(...densities);
   return L.geoJSON(data, {
     style: (feature) => ({
       fillColor: colors(
-        normalize(Math.round(feature.properties.val_density_km2), max, min)
+        normalize(Math.round(feature.properties.ghs_itemsdensity), max, min)
       ).hex(),
       color: "#000",
       weight: 0.125,
@@ -168,7 +168,7 @@ const mosaic = (data) => {
       layer
         .bindTooltip(
           `Densidade: <b>${Math.round(
-            feature.properties.val_density_km2
+            feature.properties.ghs_itemsdensity
           )} pts/km²</b><br/>Volumetria: <b>${
             feature.properties.val
           } pts</b><hr/>Clique para ver os pontos<br/>do Geohash <b>${
@@ -190,7 +190,7 @@ const mosaic = (data) => {
           layer.setStyle({
             fillColor: colors(
               normalize(
-                Math.round(feature.properties.val_density_km2),
+                Math.round(feature.properties.ghs_itemsdensity),
                 max,
                 min
               )
