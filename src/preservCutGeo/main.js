@@ -170,7 +170,7 @@ const mosaic = (data) => {
           `Densidade: <b>${Math.round(
             feature.properties.ghs_itemsdensity
           )} pts/km²</b><br/>Volumetria: <b>${
-            feature.properties.val
+            feature.properties.ghs_items
           } pts</b><hr/>Clique para ver os pontos<br/>do Geohash <b>${
             feature.properties.ghs
           }</b>`,
