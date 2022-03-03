@@ -50,8 +50,6 @@ const baseMaps = {
 const LocationSearch = document.location.search.replace("?", "");
 const ghs = LocationSearch || "geohashes";
 const orange = chroma("orange").hex();
-const baseURL =
-  "https://raw.githubusercontent.com/digital-guard/preservCutGeo-BR2021/main/data/MG/BeloHorizonte/_pk0008.01/geoaddress/";
 const colors = chroma.scale("YlGnBu");
 const normalize = (val, max, min) => (val - min) / (max - min);
 const ghs_prefix_len = 3;
