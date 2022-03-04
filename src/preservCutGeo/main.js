@@ -69,7 +69,7 @@ let data,
   remember = true;
 
 async function loadData(ghs) {
-  let path = ghs === "geohashes" ? "geohashes" : `pts_${ghs}`;
+  let path = ghs === "geohashes" ? "geohashes" : `${prefix}_${ghs}`;
   const response = await fetch(`${baseURL + path}.geojson`);
   const geojson = await response.json();
   return geojson;
