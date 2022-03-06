@@ -246,8 +246,9 @@ window.onload = () => {
     if (currentZoom <= 10) {
       if (hasAddresses) {
         clearAddresses();
+        if (!map.hasLayer(mosaicL)) { map.addLayer(mosaicL); } // best? into clearAddresses()
       }
-      //show mosaic if it is hidden????
+      //show mosaic if it is hidden??
       if (currentZoom <= minZoom) {
         recenterMap();
       }
@@ -257,6 +258,9 @@ window.onload = () => {
         }
       });
     } else {
+      if (currentZoom>15 && hasAddresses) {
+        map.removeLayer(mosaicL);
+      }
       markers.eachLayer(function (layer) {
         if (!layer.isTooltipOpen()) {
           layer.toggleTooltip();
@@ -265,11 +269,15 @@ window.onload = () => {
     }
   });
 
-  map.on("overlayadd", function () {
-    addressesL.eachLayer(function (layer) {
-      layer.bringToFront();
-    });
-  });
+  map.on({
+    overlayadd: e=> {
+      addressesL.eachLayer(function (layer) {
+        layer.bringToFront();
+      });
+      // if (e.name === 'Mosaic') alert('Mosaic added, z='+map.getZoom());
+    }
+    // , overlayremove: function(e) {if (e.name === 'Mosaic') alert('Mosaic removed, z='+map.getZoom());}
+  });  // \on
 
   setMosaic().then(function () {
     let bbox = mosaicLayer.getBounds();
@@ -289,4 +297,7 @@ window.onload = () => {
       map.fitBounds(mosaicLayer.getBounds());
     }
   };
+
+  // check hasLayer for sync external use.
+
 }; //window onload
