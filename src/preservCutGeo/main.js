@@ -202,11 +202,12 @@ const mosaic = (data) => {
   });
 };
 
+
 const addresses = (data) => {
   hasAddresses = true;
   return L.geoJSON(data, {
-    // onEachFeature: onEachFeature,
-    pointToLayer: function (feature, latlng) {
+
+    pointToLayer: (feature,latlng)=> {
       return L.circleMarker(latlng, {
         radius: 4,
         fillColor: orange,
@@ -214,14 +215,20 @@ const addresses = (data) => {
         weight: 0.15,
         opacity: 1,
         fillOpacity: 0.8,
-      }).bindTooltip(feature.properties.address, {
+      })
+    }, // \pointToLayer
+
+    onEachFeature: function (feature, layer) {
+        layer.bindTooltip(feature.properties.address, {
         opacity: 0.7,
         direction: "top",
         className: "tooltip",
       });
-    },
-  });
-};
+    } // \onEachFeature
+
+  }); // \geoJSON()
+}; // \addresses()
+
 
 window.onload = () => {
   const map = L.map("map", {
