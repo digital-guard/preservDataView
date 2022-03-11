@@ -218,12 +218,17 @@ const addresses = (data) => {
       })
     }, // \pointToLayer
 
-    onEachFeature: function (feature, layer) {
-        layer.bindTooltip(feature.properties.address, {
-        opacity: 0.7,
-        direction: "top",
-        className: "tooltip",
-      });
+    onEachFeature: (feature,layer)=> {
+        layer.bindTooltip( 
+          feature.properties.address? feature.properties.address
+            : feature.properties.via_name? feature.properties.via_name
+            : feature.properties.house_number
+          ,{
+            opacity: 0.7,
+            direction: "top",
+            className: "tooltip",
+          }
+        );
     } // \onEachFeature
 
   }); // \geoJSON()
