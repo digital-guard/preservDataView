@@ -53,7 +53,6 @@ const baseMaps = {
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
       maxZoom: 25,
-      zoomOffset: -1,
       attribution: '<a href="https://wiki.addressforall.org/doc/osmc:Atribui%C3%A7%C3%B5es" target="_help">info</a>',
     }
   ),
@@ -62,7 +61,6 @@ const baseMaps = {
     {
       maxZoom: 25,
       id: "light_all",
-      zoomOffset: -1,
       attribution: '<a href="https://wiki.addressforall.org/doc/osmc:Atribui%C3%A7%C3%B5es" target="_help">info</a>',
     }
   ),
