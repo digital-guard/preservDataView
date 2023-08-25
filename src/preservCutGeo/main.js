@@ -1,52 +1,73 @@
 /*
  * Main script, load and draw the GeoJSON features and prepare it interface.
  */
+// const baseMaps = {
+//   Grayscale: L.tileLayer(
+//     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+//     {
+//       // minZoom: 8,
+//       maxZoom: 25,
+//       id: "mapbox/light-v10",
+//       tileSize: 512,
+//       zoomOffset: -1,
+//       attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+//     }
+//   ),
+//   Satellite: L.tileLayer(
+//     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+//     {
+//       // minZoom: 8,
+//       maxZoom: 25,
+//       id: "mapbox/satellite-v9",
+//       tileSize: 512,
+//       zoomOffset: -1,
+//       attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+//     }
+//   ),
+//   Streets: L.tileLayer(
+//     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+//     {
+//       // minZoom: 8,
+//       maxZoom: 25,
+//       id: "mapbox/streets-v11",
+//       tileSize: 512,
+//       zoomOffset: -1,
+//       attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+//     }
+//   ),
+//   "Satellite Streets": L.tileLayer(
+//     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+//     {
+//       // minZoom: 8,
+//       maxZoom: 25,
+//       id: "mapbox/satellite-streets-v11",
+//       tileSize: 512,
+//       zoomOffset: -1,
+//       attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+//     }
+//   ),
+// };
+
 const baseMaps = {
+  Openstreetmap: L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      maxZoom: 25,
+      zoomOffset: -1,
+      attribution: '<a href="https://wiki.addressforall.org/doc/osmc:Atribui%C3%A7%C3%B5es" target="_help">info</a>',
+    }
+  ),
   Grayscale: L.tileLayer(
-    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+    "https://{s}.basemaps.cartocdn.com/{id}/{z}/{x}/{y}{r}.png",
     {
-      // minZoom: 8,
       maxZoom: 25,
-      id: "mapbox/light-v10",
-      tileSize: 512,
+      id: "light_all",
       zoomOffset: -1,
-      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-    }
-  ),
-  Satellite: L.tileLayer(
-    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
-    {
-      // minZoom: 8,
-      maxZoom: 25,
-      id: "mapbox/satellite-v9",
-      tileSize: 512,
-      zoomOffset: -1,
-      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-    }
-  ),
-  Streets: L.tileLayer(
-    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
-    {
-      // minZoom: 8,
-      maxZoom: 25,
-      id: "mapbox/streets-v11",
-      tileSize: 512,
-      zoomOffset: -1,
-      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
-    }
-  ),
-  "Satellite Streets": L.tileLayer(
-    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
-    {
-      // minZoom: 8,
-      maxZoom: 25,
-      id: "mapbox/satellite-streets-v11",
-      tileSize: 512,
-      zoomOffset: -1,
-      attribution: '<a href="https://www.mapbox.com/">Mapbox</a>',
+      attribution: '<a href="https://wiki.addressforall.org/doc/osmc:Atribui%C3%A7%C3%B5es" target="_help">info</a>',
     }
   ),
 };
+
 const LocationSearch = document.location.search.replace("?", "");
 const ghs = LocationSearch || "geohashes";
 const orange = chroma("orange").hex();
@@ -239,6 +260,7 @@ window.onload = () => {
   const map = L.map("map", {
     center: [-23.550385, -46.633956],
     zoom: 10,
+    attributionControl: true,
     layers: [baseMaps.Grayscale, addressesL, mosaicL],
   });
 
@@ -249,9 +271,10 @@ window.onload = () => {
     remember = !remember_tggl.checked;
   };
 
-  map.attributionControl.setPrefix(
-    '<a title="© tile data" target="_copyr" href="https://www.OSM.org/copyright">OSM</a>'
-  ); // no Leaflet advertisement!
+  // map.attributionControl.setPrefix(
+  //   '<a title="© tile data" target="_copyr" href="https://www.OSM.org/copyright">OSM</a>'
+  // ); // no Leaflet advertisement!
+  map.attributionControl.setPrefix(false);
 
   map.on("zoom", function () {
     let currentZoom = map.getZoom();
